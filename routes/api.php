@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,8 +31,13 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('me', [AuthController::class, 'me']);
+    Route::post('me', [AuthController::class, 'me'])->name('me');
+    Route::post('index', [AuthController::class, 'index'])->name('index');
+
 
 });
+
+/* Route::get('/', [UserController::class, 'index'])->name('dashboardAPI'); */
+/* Route::get('/showVinil/{id}', [UserController::class, 'show'])->name('showUserAPI'); */
 
 /* Route::get('/', [UserController::class, 'index'])->name('eventsAPI'); */

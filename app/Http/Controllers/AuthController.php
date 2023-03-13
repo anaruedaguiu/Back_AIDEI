@@ -110,4 +110,20 @@ class AuthController extends Controller
             'user' => $user
         ],201);
     }
+
+    public function index()
+    {
+        $user = auth()->user();
+
+        if ($user->isAdmin) {
+            $users = User::all();
+            return response()->json($users);
+        }
+
+        if ($user) {
+            return response()->json($user);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
 }
