@@ -14,18 +14,19 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50);
-            $table->string('userSurname', 50);
+            $table->string('surname', 50);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('phone');
-            $table->date('birthdate');
-            $table->string('idNumber');
-            $table->string('occupation');
-            $table->string('image')->nullable();;
-            $table->date('startingDate');
-            $table->boolean('status');
-            $table->boolean('isAdmin');
+            $table->string('phone')->nullable();
+            $table->string('idNumber')->nullable();
+            $table->string('collectiveAgreement')->nullable();
+            $table->string('image')->nullable();
+            $table->date('startingDate')->nullable();
+            $table->date('endingDate')->nullable();
+            $table->boolean('status')->default(true);
+            $table->boolean('contractType')->nullable();
+            $table->boolean('isAdmin')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -19,17 +19,18 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'userSurname' => fake()->lastName(),
+            'surname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'phone' => fake()->phoneNumber(),
-            'birthdate' => fake()->date($format = 'Y-m-d', $max = 'now'),
             'idNumber' => fake()->name(),
-            'occupation' => fake()->jobTitle(),
+            'collectiveAgreement' => fake()->jobTitle(),
             'image' => fake()->imageUrl(),
             'startingDate' => fake()->date($format = 'Y-m-d', $max = 'now'),
+            'endingDate' => fake()->date($format = 'Y-m-d', $max = 'now'),
             'status' => true,
+            'contractType' => true,
             'isAdmin' => false,
             'remember_token' => Str::random(10),
         ];
