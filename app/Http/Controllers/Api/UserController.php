@@ -59,4 +59,18 @@ class UserController extends Controller
             'user' => $user
         ],201);
     }
+
+    /* public function store(Request $request)
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'surname'=> $request->surname,
+            'email'=> $request->email,
+            'password'=> $request->password,
+        ]);
+
+        $user->save();
+        
+        return response()->json($user, 200);
+    } */
 }
