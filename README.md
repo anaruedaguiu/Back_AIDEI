@@ -1,67 +1,150 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"> 
+    <img src="https://user-images.githubusercontent.com/98114939/223129786-8fdf2701-972e-454a-ad98-1092c6193da3.png" alt="Logo Factoría F5" width="125px">
+    <img src="https://user-images.githubusercontent.com/98114939/223130140-13c32ed0-9706-4454-a4f3-aa9fda31249b.png" alt="Logo Aidei" width="150px">
+</p> 
 
+<h3 align="center"> 
+Leave management application 📅
+</h3
+
+AIDEI (Insertion company website) needs an app to be able to manage the holidays and absences of employees during their time with the company, in order to have more flexibility when managing this information.
+
+***
+
+## Table of contents
+1. [Team Members](#team-members)
+2. [Screenshots](#screenshots)
+3. [Technologies](#stacks)
+4. [Installation](#how-to-install-this-project)
+5. [Tests](#tests)
+6. [Methodology](#methodology)
+7. [Next Steps](#next-steps)
+
+***
+
+## 1. Team Members
+
+| Name | Role | <img src="https://github.com/Yelose/Yelose/blob/main/img/github.png" width="30px" height="30px"> |
+| :--- | :---: | :---: |
+| Lola Navarro | Scrum Master | https://github.com/ZLoln |
+| Camila Ruiz | Scrum Master | https://github.com/camilaruiz17 |
+| Ana Rueda | Product Owner | https://github.com/anaruedaguiu |
+| Sierri Pérez | Developer | https://github.com/sierriconvoz |
+| Veronika Komarova | Developer | https://github.com/VeronikaKoma |
+| Paloma Ruiz | Developer| https://github.com/birdsinyourgarden |
+| Adriana Aguilar | Developer | https://github.com/adrianaguilaruiz |
+
+***
+
+## 2. Screenshots
+
+<h3 align="center">Sketchs views users</h3>
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+    <img src="https://user-images.githubusercontent.com/98114939/223143156-eb815b23-1b53-4f30-bd04-8207963a57a6.png" alt="Sketch views users" width="200px">
 </p>
 
-## About Laravel
+<h3 align="center">Sketchs views admin</h3>
+<p align="center"> 
+    <img src="https://user-images.githubusercontent.com/98114939/223143373-2c43c6bb-e75b-46fc-aebe-5cb3bb444e99.png" alt="Sketch views admin" width="200px">
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<h3 align="center">Mockups views users</h3>
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/98114939/223143751-7f303569-d5ce-4256-9478-ad8ecce80530.png" alt="Mockup views users" width="200px">
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<h3 align="center">Mockups views admin</h3>
+<p align="center"> 
+    <img src="https://user-images.githubusercontent.com/98114939/223144013-1b9e1a4b-c61b-47de-9b07-3b4498421569.png" alt="Mockup views admin" width="200px">
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+***
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 3. Stacks
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- HTML 5
+- CSS 3
+- BootStrap 5
+- PHP 8.1.10
+- Laravel Framework 10.1.5
+- MySQL
+- React
+    
+***
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 4. How to install this project
 
-## Laravel Sponsors
+You will need a text editor and perform the following steps:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+1. Clone the project
 
-### Premium Partners
+Front-end
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```bash
+  git clone https://github.com/camilaruiz17/front-end-react-final-proyect
+```
+Back-end
+    
+```bash
+  git clone https://github.com/birdsinyourgarden/vacacionesAIDEI
+```
 
-## Contributing
+2. Go to the project directory
+```bash
+  cd vacacionesAIDEI
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. Start MySQL service and create a MySQL database named "aidei"
 
-## Code of Conduct
+4. Create in the text editor an .env file by copying the contents of .env.example and modify the database name (laravel by aidei)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. Install dependencies
+```bash
+  npm install
+```
+```bash
+  composer install
+```
 
-## Security Vulnerabilities
+6. Activate the server and keep this terminal open
+```bash
+  npm run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+7. Run the PHP server and keep this terminal open
+```bash
+  php artisan serve
+```
 
-## License
+8. Migrate database
+```bash
+  php artisan migrate:fresh --seed
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# vacacionesAIDEI
+***
+
+## 5. Tests
+To run the tests, execute the following command(s)
+```bash
+  php artisan test
+```
+<img width="320" alt="" src="">
+
+```bash
+  vendor/bin/phpunit tests
+```
+<img width="461" alt="" src="">
+
+***
+
+
+## 6. Methodology
+- TDD
+- Agile with Scrum
+- Mob and pair programming
+***
+
+## 7. Next Steps
+
+
