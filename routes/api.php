@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +27,15 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('me', [AuthController::class, 'me']);
+    Route::post('me', [AuthController::class, 'me'])->name('me');
+    Route::post('register', [UserController::class, 'register'])->middleware('isadmin');
+    Route::post('index', [UserController::class, 'index'])->name('index');
+
 
 });
 
-/* Route::get('/', [UserController::class, 'index'])->name('eventsAPI'); */
+
+

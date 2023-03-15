@@ -2,65 +2,76 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware(['auth:api']);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    
+    public function index(Request $request)
     {
-        //
+        $user = auth()->user();
+
+        if ($user->isAdmin) {
+            $users = User::all();
+            return response()->json($users);
+        }
+
+        if ($user) {
+            return response()->json($user);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function register(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required',
+            'surname'=> 'required',
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|min:6'
+        ]); 
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(),400);
+        }
+
+        $user = User::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)]
+        ));
+
+        return response()->json([
+            'message' => '¡Usuario registrado exitosamente!',
+            'user' => $user
+        ],201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    /* public function store(Request $request)
     {
-        //
-    }
+        $user = User::create([
+            'name' => $request->name,
+            'surname'=> $request->surname,
+            'email'=> $request->email,
+            'password'=> $request->password,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+        $user->save();
+        
+        return response()->json($user, 200);
+    } */
 }
 
