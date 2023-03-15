@@ -66,8 +66,8 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 - HTML 5
 - CSS 3
 - BootStrap 5
-- PHP 8.1.10
-- Laravel Framework 10.1.5
+- PHP 8.1
+- Laravel Framework 10.0
 - MySQL
 - React
     
@@ -75,19 +75,16 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 
 ## 4. How to install this project
 
-You will need a text editor and perform the following steps:
+The project is divided into two repositories: back and front end. You will need a text editor and clone both repositories. Follow the next steps:
+
+**BACK**
 
 1. Clone the project
 
-Front-end
-
-```bash
-  git clone https://github.com/camilaruiz17/front-end-react-final-proyect
-```
 Back-end
     
 ```bash
-  git clone https://github.com/birdsinyourgarden/vacacionesAIDEI
+  git clone https://github.com/anaruedaguiu/vacacionesAIDEI.git
 ```
 
 2. Go to the project directory
@@ -106,11 +103,11 @@ Back-end
 ```bash
   composer install
 ```
-
-6. Activate the server and keep this terminal open
+6. Generate secret key 
 ```bash
-  npm run dev
+  php artisan jwt:secret
 ```
+This will update your .env file with something like JWT_SECRET=foobar. It is the key that will be used to sign your tokens.
 
 7. Run the PHP server and keep this terminal open
 ```bash
@@ -122,6 +119,16 @@ Back-end
   php artisan migrate:fresh --seed
 ```
 
+**FRONT**
+
+1. Clone the project
+
+Front-end
+
+```bash
+  git clone https://github.com/camilaruiz17/front-end-react-final-proyect
+```
+
 ***
 
 ## 5. Tests
@@ -129,12 +136,12 @@ To run the tests, execute the following command(s)
 ```bash
   php artisan test
 ```
-<img width="320" alt="" src="">
+<img width="500" alt="test_artisan_aidei_mvp2" src="https://user-images.githubusercontent.com/117440372/225344864-a18c2fab-06e1-440f-bade-ce775a69e808.png">
 
 ```bash
   vendor/bin/phpunit tests
 ```
-<img width="461" alt="" src="">
+<img width="500" alt="test_vendor_aidei_mvp2" src="https://user-images.githubusercontent.com/117440372/225345098-881dbe7f-65ff-4eeb-9a07-44e331260e24.png">
 
 ***
 
