@@ -5,82 +5,58 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\IsAdmin;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function __construct()
     {
-        // Verificar si el usuario actual es un administrador
-        if (auth()->user()->isAdmin()) {
-            // Si el usuario es un administrador, obtener todos los usuarios registrados en la base de datos
+        $this->middleware(['auth:api']);
+    }
+
+    
+    public function index(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user->isAdmin) {
             $users = User::all();
-
-            // Devolver los usuarios en formato JSON
-            return response()->json([$users,200]);
+            return response()->json($users);
         }
 
-        // Si el usuario no es un administrador, obtener su perfil
-        if (auth()->check()) {
-            $user = auth()->user();
-            $me = $user->me;
-
-            // Devolver el perfil del usuario en formato JSON
-            return response()->json([$me,200]);
+        if ($user) {
+            return response()->json($user);
         }
 
-        // Si el usuario no está autenticado, devolver una respuesta de error
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function register(Request $request)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required',
+            'surname'=> 'required',
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|min:6'
+        ]); 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(),400);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $user = User::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)]
+        ));
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'message' => '¡Usuario registrado exitosamente!',
+            'user' => $user
+        ],201);
     }
 }

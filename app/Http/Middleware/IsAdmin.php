@@ -14,11 +14,14 @@ class IsAdmin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle($request, Closure $next)
     {
-        if(Auth::user()->isAdmin){
-            return $next($request);
+        $user = $request->user();
+
+        if (! $user || $user->isAdmin !== 1) {
+            return response()->json(['error' => 'No tienes permisos para acceder a esta ruta'], 403);
         }
-        return redirect()->route('dashboardAPI');
+
+        return $next($request);
     }
 }
