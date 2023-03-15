@@ -18,7 +18,6 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 * [Installation](#how-to-install-this-project)
 * [Tests](#tests)
 * [Methodology](#methodology)
-* [Core skills](#core-skills)
 * [Next Steps](#next-steps)
 
 ***
