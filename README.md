@@ -12,17 +12,18 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 ***
 
 ## Table of contents
-1. [Team Members](#team-members)
-2. [Screenshots](#screenshots)
-3. [Technologies](#stacks)
-4. [Installation](#how-to-install-this-project)
-5. [Tests](#tests)
-6. [Methodology](#methodology)
-7. [Next Steps](#next-steps)
+* [Team Members](#team-members)
+* [Screenshots](#screenshots)
+* [Technologies](#stacks)
+* [Installation](#how-to-install-this-project)
+* [Tests](#tests)
+* [Methodology](#methodology)
+* [Core skills](#core-skills)
+* [Next Steps](#next-steps)
 
 ***
 
-## 1. Team Members
+## Team Members
 
 | Name | Role | <img src="https://github.com/Yelose/Yelose/blob/main/img/github.png" width="30px" height="30px"> |
 | :--- | :---: | :---: |
@@ -36,7 +37,7 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 
 ***
 
-## 2. Screenshots
+## Screenshots
 
 <h3 align="center">Sketchs views users</h3>
 <p align="center">
@@ -61,7 +62,7 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 ***
 
 
-## 3. Stacks
+## Stacks
 
 - HTML 5
 - CSS 3
@@ -73,7 +74,7 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
     
 ***
 
-## 4. How to install this project
+## How to install this project
 
 The project is divided into two repositories: back and front end. You will need a text editor and clone both repositories. Follow the next steps:
 
@@ -131,7 +132,7 @@ Front-end
 
 ***
 
-## 5. Tests
+## Tests
 To run the tests, execute the following command(s)
 ```bash
   php artisan test
@@ -146,12 +147,12 @@ To run the tests, execute the following command(s)
 ***
 
 
-## 6. Methodology
+## Methodology
 - TDD
 - Agile with Scrum
 - Mob and pair programming
 ***
 
-## 7. Next Steps
+## Next Steps
 
 
