@@ -1,17 +1,19 @@
 <p align="center"> 
-    <img src="https://user-images.githubusercontent.com/98114939/223129786-8fdf2701-972e-454a-ad98-1092c6193da3.png" alt="Logo Factoría F5" width="125px">
+    <img src="https://user-images.githubusercontent.com/108950985/225649361-56dc0b8a-5a4f-4f2e-8dae-b10406212003.png" alt="Logo Factoría F5" width="120px">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <img src="https://user-images.githubusercontent.com/98114939/223130140-13c32ed0-9706-4454-a4f3-aa9fda31249b.png" alt="Logo Aidei" width="150px">
 </p> 
 
 <h3 align="center"> 
-Leave management application 📅
+Leave Management Application  <img src="https://user-images.githubusercontent.com/108950985/225650398-d69cb649-716f-4fe5-acb2-95522d3246cb.png" alt="Emoticono calendario">
 </h3
 
-AIDEI (Insertion company website) needs an app to be able to manage the holidays and absences of employees during their time with the company, in order to have more flexibility when managing this information.
+[AIDEI](http://www.aidei.es/) needs an app to be able to manage the holidays and absences of employees during their time with the company, in order to have more flexibility when managing this information.
 
 ***
 
-## Table of contents
+## Table of contents 📖
+  
 * [Team Members](#team-members)
 * [Screenshots](#screenshots)
 * [Technologies](#stacks)
@@ -22,7 +24,7 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 
 ***
 
-## Team Members
+## Team Members 👩‍💻
 
 | Name | Role | <img src="https://github.com/Yelose/Yelose/blob/main/img/github.png" width="30px" height="30px"> |
 | :--- | :---: | :---: |
@@ -36,7 +38,7 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 
 ***
 
-## Screenshots
+## Screenshots 📸
 
 <h3 align="center">Sketchs views users</h3>
 <p align="center">
@@ -60,8 +62,7 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
 
 ***
 
-
-## Stacks
+## Stacks 🛠
 
 - HTML 5
 - CSS 3
@@ -73,7 +74,7 @@ AIDEI (Insertion company website) needs an app to be able to manage the holidays
     
 ***
 
-## How to install this project
+## How to install this project ⚙
 
 The project is divided into two repositories: back and front end. You will need a text editor and clone both repositories. Follow the next steps:
 
@@ -88,6 +89,7 @@ Back-end
 ```
 
 2. Go to the project directory
+  
 ```bash
   cd vacacionesAIDEI
 ```
@@ -97,24 +99,31 @@ Back-end
 4. Create in the text editor an .env file by copying the contents of .env.example and modify the database name (laravel by aidei)
 
 5. Install dependencies
+  
 ```bash
   npm install
 ```
+  
 ```bash
   composer install
 ```
+  
 6. Generate secret key 
+  
 ```bash
   php artisan jwt:secret
 ```
+  
 This will update your .env file with something like JWT_SECRET=foobar. It is the key that will be used to sign your tokens.
 
 7. Run the PHP server and keep this terminal open
+  
 ```bash
   php artisan serve
 ```
 
 8. Migrate database
+  
 ```bash
   php artisan migrate:fresh --seed
 ```
@@ -128,10 +137,23 @@ Front-end
 ```bash
   git clone https://github.com/camilaruiz17/front-end-react-final-proyect
 ```
+  
+2. Install the project's dependencies by running the following command
+  
+```bash
+  npm install
+```
+  
+3. Run the project and keep this terminal open
+  
+```bash
+  npm run dev
+```
 
 ***
 
-## Tests
+## Tests ✅
+  
 To run the tests, execute the following command(s)
 ```bash
   php artisan test
@@ -145,13 +167,13 @@ To run the tests, execute the following command(s)
 
 ***
 
-
-## Methodology
+## Methodology 📚
+  
 - TDD
 - Agile with Scrum
-- Mob and pair programming
+- Mob, pair and solo programming
+  
 ***
 
-## Next Steps
-
+## Next Steps 🔜
 
