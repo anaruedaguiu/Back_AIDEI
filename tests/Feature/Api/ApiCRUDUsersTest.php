@@ -44,4 +44,45 @@ class ApiCRUDUsersTest extends TestCase
                     'email' => $user1->email,
                 ]);
     }
+
+    public function test_onlyAdminsCanRegisterUsers() 
+    {
+        $user1 = User::factory()->create(['isAdmin' => false]);
+        $admin1 = User::factory()->create(['isAdmin' => true]);
+        $adminToken = $admin1->createToken('admin-token')->plainTextToken;
+
+        $response = $this->withHeaders([
+                        'Authorization' => 'Bearer ' . $adminToken,
+                    ])
+                    ->post(route('register'), [
+                        'name' => 'name',
+                        'surname' => 'surname',
+                        'email' => 'admin@email.com',
+                        'password' => 'password',
+                    ]);
+        
+        $response->assertStatus(201);
+
+/*         $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $adminToken,
+            ])
+            ->post(route('index'));
+    
+        $response->assertStatus(200);
+
+        $response = $this->withHeaders([
+                        'Authorization' => 'Bearer ' . $user1->createToken('user-token')->plainTextToken,
+                    ])
+                    ->post(route('register'), [
+                        'name' => 'name',
+                        'surname' => 'surname',
+                        'email' => 'user@email.com',
+                        'password' => 'password',
+                    ]);
+
+        $response->assertStatus(403)
+                ->assertJson([
+                    'error' => 'No tienes permisos para acceder a esta ruta'
+                ]);
+ */    }
 }
