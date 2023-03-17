@@ -52,12 +52,14 @@ Leave Management Application  <img src="https://user-images.githubusercontent.co
 
 <h3 align="center">Mockups views users</h3>
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/98114939/223143751-7f303569-d5ce-4256-9478-ad8ecce80530.png" alt="Mockup views users" width="200px">
+    <img width="200" alt="Mockup views users" src="https://user-images.githubusercontent.com/98114939/225834704-10cfd6d2-c02e-4fee-9f66-004144f6acbd.png">
 </p>
+
 
 <h3 align="center">Mockups views admin</h3>
 <p align="center"> 
-    <img src="https://user-images.githubusercontent.com/98114939/223144013-1b9e1a4b-c61b-47de-9b07-3b4498421569.png" alt="Mockup views admin" width="200px">
+    <img width="200" alt="Mockup views admin 1" src="https://user-images.githubusercontent.com/98114939/225835094-7f54dd92-b8d4-4585-813a-d14b6bb2d38c.png">
+    <img width="200" alt="Mockup views admin 2" src="https://user-images.githubusercontent.com/98114939/225835110-e6e9e3d9-9603-45d2-9b22-ffd76c1d062b.png">
 </p>
 
 ***
