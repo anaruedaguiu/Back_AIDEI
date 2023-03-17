@@ -65,7 +65,7 @@ class ApiCRUDUsersTest extends TestCase
                     ]);
                     /* $response->assertCreated(); */
         
-        $response->assertStatus(201);
+        $response->assertStatus(201); 
 
         /* $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $adminToken,
