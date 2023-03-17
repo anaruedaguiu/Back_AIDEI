@@ -42,7 +42,7 @@ class UserController extends Controller
             'name'=> 'required',
             'surname'=> 'required',
             'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string'
+            'password' => 'required|string|min:6'
         ]); 
 
         if($validator->fails()){
@@ -53,6 +53,7 @@ class UserController extends Controller
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
+
 
         return response()->json([
             'message' => '¡Usuario registrado exitosamente!',

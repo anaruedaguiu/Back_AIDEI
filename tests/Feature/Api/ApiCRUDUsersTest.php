@@ -53,13 +53,16 @@ class ApiCRUDUsersTest extends TestCase
 
         $response = $this->withHeaders([
                         'Authorization' => 'Bearer ' . $adminToken,
+                        /* 'Content-Type' => 'application/json', */
+                        'Accept' => '*/*' 
                     ])
-                    ->post(route('register'), [
+                    ->postJson(route('register'), [
                         'name' => 'name',
                         'surname' => 'surname',
                         'email' => 'admin@email.com',
                         'password' => 'password',
                     ]);
+                    /* $response->assertCreated(); */
         
         $response->assertStatus(201);
 
