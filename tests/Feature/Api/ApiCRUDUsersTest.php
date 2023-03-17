@@ -54,7 +54,6 @@ class ApiCRUDUsersTest extends TestCase
 
         $response = $this->withHeaders([
                         'Authorization' => 'Bearer ' . $adminToken,
-                        /* 'Content-Type' => 'application/json', */
                         'Accept' => '*/*' 
                     ])
                     ->postJson(route('register'), [
@@ -63,16 +62,8 @@ class ApiCRUDUsersTest extends TestCase
                         'email' => 'admin@email.com',
                         'password' => 'password',
                     ]);
-                    /* $response->assertCreated(); */
         
         $response->assertStatus(201); 
-
-        /* $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $adminToken,
-            ])
-            ->post(route('index'));
-    
-        $response->assertStatus(200); */
 
         $response = $this->withHeaders([
                         'Authorization' => 'Bearer ' . $user1Token,
@@ -86,8 +77,5 @@ class ApiCRUDUsersTest extends TestCase
                     ]);
 
         $response->assertRedirect();
-                /* ->assertJson([
-                    'error' => 'No tienes permisos para acceder a esta ruta'
-                ]); */
     }
 }
