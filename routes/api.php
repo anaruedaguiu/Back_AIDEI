@@ -33,7 +33,7 @@ Route::group([
     Route::post('me', [AuthController::class, 'me'])->name('me');
     Route::post('register', [UserController::class, 'register'])->middleware('isadmin');
     Route::post('index', [UserController::class, 'index'])->name('index');
-
+    Route::put('update/{id}', [UserController::class, 'update'])->name('update')->middleware('isadmin');
 
 });
 

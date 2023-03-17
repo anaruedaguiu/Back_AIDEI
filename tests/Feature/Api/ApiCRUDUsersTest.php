@@ -78,4 +78,44 @@ class ApiCRUDUsersTest extends TestCase
 
         $response->assertRedirect();
     }
+
+    public function test_onlyAdminsCanUpdateUsers() 
+    {
+        /* $user1 = User::factory()->create(['isAdmin' => false]); */
+        $admin1 = User::factory()->create(['isAdmin' => true]);
+        $adminToken = $admin1->createToken('admin-token')->plainTextToken;
+        /* $user1Token = $user1->createToken('user1-token')->plainTextToken; */
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $adminToken,
+            'Accept' => '*/*' 
+        ])
+        ->postJson(route('register'), [
+            'name' => 'name',
+            'surname' => 'surname',
+            'email' => 'admin@email.com',
+            'password' => 'password',
+        ]);
+
+        $data = ['name' => 'name'];
+
+        $response = $this->post(route('index'));
+        $response->assertStatus(200)
+            ->assertJsonCount(1)
+            ->assertJsonFragment($data);
+        
+        $response = $this->put('api/auth/update/1', [
+            'name' => 'nameTest',
+            'surname' => 'surname',
+            'email' => 'admin@email.com',
+            'password' => 'password',
+        ]);
+
+        $data = ['name' => 'nameTest'];
+
+        $response = $this->post(route('index'));
+        $response->assertStatus(200)
+            ->assertJsonCount(1)
+            ->assertJsonFragment($data);
+    }
 }
