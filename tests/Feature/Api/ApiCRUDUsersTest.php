@@ -50,6 +50,7 @@ class ApiCRUDUsersTest extends TestCase
         $user1 = User::factory()->create(['isAdmin' => false]);
         $admin1 = User::factory()->create(['isAdmin' => true]);
         $adminToken = $admin1->createToken('admin-token')->plainTextToken;
+        $user1Token = $user1->createToken('user1-token')->plainTextToken;
 
         $response = $this->withHeaders([
                         'Authorization' => 'Bearer ' . $adminToken,
@@ -66,26 +67,27 @@ class ApiCRUDUsersTest extends TestCase
         
         $response->assertStatus(201);
 
-/*         $response = $this->withHeaders([
+        /* $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $adminToken,
             ])
             ->post(route('index'));
     
-        $response->assertStatus(200);
+        $response->assertStatus(200); */
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer ' . $user1->createToken('user-token')->plainTextToken,
+                        'Authorization' => 'Bearer ' . $user1Token,
+                        'Accept' => '*/*' 
                     ])
-                    ->post(route('register'), [
+                    ->postJson(route('register'), [
                         'name' => 'name',
                         'surname' => 'surname',
                         'email' => 'user@email.com',
                         'password' => 'password',
                     ]);
 
-        $response->assertStatus(403)
-                ->assertJson([
+        $response->assertRedirect();
+                /* ->assertJson([
                     'error' => 'No tienes permisos para acceder a esta ruta'
-                ]);
- */    }
+                ]); */
+    }
 }
