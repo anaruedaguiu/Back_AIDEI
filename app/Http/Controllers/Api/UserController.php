@@ -17,7 +17,6 @@ class UserController extends Controller
     {
         $this->middleware(['auth:api']);
     }
-
     
     public function index(Request $request)
     {
@@ -34,7 +33,6 @@ class UserController extends Controller
 
         return response()->json(['error' => 'Unauthorized'], 401);
     }
-
 
     public function register(Request $request)
     {
@@ -61,18 +59,21 @@ class UserController extends Controller
         ],201);
     }
 
-    /* public function store(Request $request)
+    public function destroy ($id)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'surname'=> $request->surname,
-            'email'=> $request->email,
-            'password'=> $request->password,
-        ]);
+        $user = User::find($id);
 
-        $user->save();
+        if (!$user) {
+            return response()->json(['error' => 'Usuario no encontrado'], 404);
+        }
+
+        if(!auth()->user()->isAdmin) {
+            return response()->json(['error' => 'No autorizado'], 403);
+        }
         
-        return response()->json($user, 200);
-    } */
+        $user->delete();
+        
+        return response()->json(['message' => 'Usuario eliminado exitosamente'], 200);
+    }
 }
 

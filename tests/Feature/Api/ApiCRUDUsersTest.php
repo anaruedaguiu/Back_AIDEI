@@ -22,7 +22,7 @@ class ApiCRUDUsersTest extends TestCase
 
     use RefreshDatabase;
 
-    public function test_onlyAdminsCanAccessUsersList()
+    public function test_onlyAdminsCanAccessUsersFullList()
     {
         // Crea dos usuarios no administradores y dos administradores
         $user1 = User::factory()->create(['isAdmin' => false]);
@@ -77,5 +77,26 @@ class ApiCRUDUsersTest extends TestCase
                     ]);
 
         $response->assertRedirect();
+    }
+
+    public function test_onlyAdminsCanDeleteUsers()
+    {
+        // Crear usuario administrador
+        $admin = User::factory()->create(['isAdmin' => true]);
+
+        // Crear usuario no administrador
+        $user = User::factory()->create(['isAdmin' => false]);
+
+        // Hacer una petición DELETE para eliminar al usuario no administrador
+        $response = $this->actingAs($admin, 'api')->delete(route('deleteUser', $user->id));
+
+        // Hacer una petición DELETE como el usuario no administrador
+        $response = $this->actingAs($user, 'api')->delete(route('deleteUser', $admin->id));
+
+        // Verificar que la respuesta tenga el código HTTP 403 (prohibido)
+        $response->assertForbidden();
+
+        // Verificar que el usuario no haya sido eliminado de la base de datos
+        $this->assertDatabaseHas('users', ['id' => $admin->id]);
     }
 }

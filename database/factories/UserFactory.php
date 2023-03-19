@@ -25,7 +25,7 @@ class UserFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'phone' => fake()->phoneNumber(),
             'idNumber' => fake()->name(),
-            'collectiveAgreement' => fake()->jobTitle(),
+            'sector' => fake()->jobTitle(),
             'image' => fake()->imageUrl(),
             'startingDate' => fake()->date($format = 'Y-m-d', $max = 'now'),
             'endingDate' => fake()->date($format = 'Y-m-d', $max = 'now'),
