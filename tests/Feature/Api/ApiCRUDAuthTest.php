@@ -62,4 +62,16 @@ class ApiCRUDAuthTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_userProfileCanBeShowed()
+    {
+        $userTest = User::factory()->create();
+        $this->assertCount(1, User::all());
+        
+        $response=$this->actingAs($userTest)->postJson(route('profile', $userTest->id));
+
+        $response->assertStatus(200);
+
+        $this->assertNotEmpty($response);
+    }
+
 }

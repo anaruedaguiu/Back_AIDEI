@@ -30,7 +30,7 @@ Route::group([
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('me', [AuthController::class, 'me'])->name('me');
+    Route::post('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('register', [UserController::class, 'register'])->middleware('isadmin');
     Route::post('index', [UserController::class, 'index'])->name('index');
     Route::delete('deleteUser/{id}', [UserController::class, 'destroy'])->name('deleteUser')->middleware('isadmin');
