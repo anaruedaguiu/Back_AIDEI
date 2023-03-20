@@ -100,3 +100,4 @@ class ApiCRUDUsersTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $admin->id]);
     }
 }
+
