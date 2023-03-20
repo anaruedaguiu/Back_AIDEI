@@ -99,12 +99,12 @@ class ApiCRUDUsersTest extends TestCase
 
         $data = ['name' => 'name'];
 
-        $response = $this->post(route('index'));
+        $response = $this->postJson(route('index'));
         $response->assertStatus(200)
             ->assertJsonCount(1)
             ->assertJsonFragment($data);
         
-        $response = $this->put('api/auth/update/1', [
+        $response = $this->putJson('api/auth/update/1', [
             'name' => 'nameTest',
             'surname' => 'surname',
             'email' => 'admin@email.com',
@@ -113,7 +113,7 @@ class ApiCRUDUsersTest extends TestCase
 
         $data = ['name' => 'nameTest'];
 
-        $response = $this->post(route('index'));
+        $response = $this->postJson(route('index'));
         $response->assertStatus(200)
             ->assertJsonCount(1)
             ->assertJsonFragment($data);
