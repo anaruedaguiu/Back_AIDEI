@@ -81,41 +81,34 @@ class ApiCRUDUsersTest extends TestCase
 
     public function test_onlyAdminsCanUpdateUsers() 
     {
-        /* $user1 = User::factory()->create(['isAdmin' => false]); */
+        $user1 = User::factory()->create(['isAdmin' => false]);
         $admin1 = User::factory()->create(['isAdmin' => true]);
         $adminToken = $admin1->createToken('admin-token')->plainTextToken;
-        /* $user1Token = $user1->createToken('user1-token')->plainTextToken; */
-
+        $user1Token = $user1->createToken('user1-token')->plainTextToken;
+    
+        // Try to update user as a regular user
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $user1Token,
+            'Accept' => '*/*'
+        ])->putJson("api/auth/update/{$user1->id}", [
+            'name' => 'Test User',
+            'surname' => 'surname',
+            'email' => 'admin@email.com',
+            'password' => 'password',
+        ]);
+        $response->assertStatus(401);
+    
+        // Try to update user as an admin
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $adminToken,
-            'Accept' => '*/*' 
-        ])
-        ->postJson(route('register'), [
-            'name' => 'name',
+            'Accept' => '*/*'
+        ])->putJson("api/auth/update/{$user1->id}", [
+            'name' => 'Test User',
             'surname' => 'surname',
             'email' => 'admin@email.com',
             'password' => 'password',
         ]);
-
-        $data = ['name' => 'name'];
-
-        $response = $this->postJson(route('index'));
-        $response->assertStatus(200)
-            ->assertJsonCount(1)
-            ->assertJsonFragment($data);
-        
-        $response = $this->putJson('api/auth/update/1', [
-            'name' => 'nameTest',
-            'surname' => 'surname',
-            'email' => 'admin@email.com',
-            'password' => 'password',
-        ]);
-
-        $data = ['name' => 'nameTest'];
-
-        $response = $this->postJson(route('index'));
-        $response->assertStatus(200)
-            ->assertJsonCount(1)
-            ->assertJsonFragment($data);
+        $response->assertStatus(200);
+        $this->assertEquals('Test User', $user1->fresh()->name);
     }
 }
