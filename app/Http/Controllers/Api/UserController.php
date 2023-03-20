@@ -18,7 +18,7 @@ class UserController extends Controller
         $this->middleware(['auth:api']);
     }
     
-    public function index(Request $request)
+    public function home(Request $request)
     {
         $user = auth()->user();
 

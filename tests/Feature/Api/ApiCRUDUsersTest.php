@@ -31,12 +31,12 @@ class ApiCRUDUsersTest extends TestCase
         $admin2 = User::factory()->create(['isAdmin' => true]);
     
         // Caso en que el usuario es administrador
-        $response = $this->actingAs($admin1)->post(route('index'));
+        $response = $this->actingAs($admin1)->post(route('home'));
         $response->assertStatus(200)
                 ->assertJsonCount(4);
     
         // Caso en que el usuario no es administrador
-        $response = $this->actingAs($user1)->post(route('index'));
+        $response = $this->actingAs($user1)->post(route('home'));
         $response->assertStatus(200)
                 ->assertJsonFragment([
                     'id' => $user1->id,
