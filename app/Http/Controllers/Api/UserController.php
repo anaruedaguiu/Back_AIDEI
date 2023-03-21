@@ -74,6 +74,24 @@ class UserController extends Controller
         $user->delete();
         
         return response()->json(['message' => 'Usuario eliminado exitosamente'], 200);
+        return response()->json($user, 200);
+    } 
+
+    public function update(Request $request, $id)
+    {
+        //
+        $user = User::find($id);
+
+        $user->update([
+            'name' => $request->name,
+            'surname'=> $request->surname,
+            'email'=> $request->email,
+            'password'=> $request->password,
+        ]);
+
+        $user->save();
+        
+        return response()->json($user, 200);
     }
 }
 

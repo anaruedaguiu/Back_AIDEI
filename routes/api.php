@@ -34,6 +34,8 @@ Route::group([
     Route::post('register', [UserController::class, 'register'])->middleware('isadmin');
     Route::post('home', [UserController::class, 'home'])->name('home');
     Route::delete('deleteUser/{id}', [UserController::class, 'destroy'])->name('deleteUser')->middleware('isadmin');
+    Route::put('update/{id}', [UserController::class, 'update'])->name('update')->middleware('isadmin');
+
 });
 
 

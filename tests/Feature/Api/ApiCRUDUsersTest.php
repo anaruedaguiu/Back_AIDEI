@@ -99,6 +99,37 @@ class ApiCRUDUsersTest extends TestCase
         // Verificar que el usuario no haya sido eliminado de la base de datos
         $this->assertDatabaseHas('users', ['id' => $admin->id]);
     }
+
+    public function test_onlyAdminsCanUpdateUsers() 
+    {
+        $user1 = User::factory()->create(['isAdmin' => false]);
+        $admin1 = User::factory()->create(['isAdmin' => true]);
+        $adminToken = $admin1->createToken('admin-token')->plainTextToken;
+        $user1Token = $user1->createToken('user1-token')->plainTextToken;
+    
+        // Try to update user as a regular user
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $user1Token,
+            'Accept' => '*/*'
+        ])->putJson("api/auth/update/{$user1->id}", [
+            'name' => 'Test User',
+            'surname' => 'surname',
+            'email' => 'admin@email.com',
+            'password' => 'password',
+        ]);
+        $response->assertStatus(401);
+    
+        // Try to update user as an admin
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $adminToken,
+            'Accept' => '*/*'
+        ])->putJson("api/auth/update/{$user1->id}", [
+            'name' => 'Test User',
+            'surname' => 'surname',
+            'email' => 'admin@email.com',
+            'password' => 'password',
+        ]);
+        $response->assertStatus(200);
+        $this->assertEquals('Test User', $user1->fresh()->name);
+    }
 }
-
-

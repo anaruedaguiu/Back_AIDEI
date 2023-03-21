@@ -29,3 +29,4 @@ class DatabaseSeeder extends Seeder
         User::factory()->create(['name' => 'Paloma', 'surname' => 'Ruiz', 'email' => 'pruiz@gmail.com', 'isAdmin' => false]);
     }
 }
+
