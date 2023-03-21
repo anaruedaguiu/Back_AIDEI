@@ -18,7 +18,7 @@ class IsAdmin
     {
         $user = $request->user();
 
-        if (! $user || $user->isAdmin !== 1) {
+        if (Auth::user()->isAdmin != true) {
             return response()->json(['error' => 'No tienes permisos para acceder a esta ruta'], 403);
         }
 

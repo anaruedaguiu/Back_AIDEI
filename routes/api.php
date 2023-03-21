@@ -31,11 +31,21 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('profile', [AuthController::class, 'profile'])->name('profile');
-    Route::post('register', [UserController::class, 'register'])->middleware('isadmin');
     Route::post('home', [UserController::class, 'home'])->name('home');
-    Route::delete('deleteUser/{id}', [UserController::class, 'destroy'])->name('deleteUser')->middleware('isadmin');
-    Route::put('update/{id}', [UserController::class, 'update'])->name('update')->middleware('isadmin');
 
+});
+
+Route::group([
+    'middleware' => [
+        'isadmin',
+        'api'
+    ],
+], function () {
+
+    // for all admins
+    Route::post('register', [UserController::class, 'register']);
+    Route::delete('deleteUser/{id}', [UserController::class, 'destroy'])->name('deleteUser');
+    Route::put('update/{id}', [UserController::class, 'update'])->name('update');
 });
 
 

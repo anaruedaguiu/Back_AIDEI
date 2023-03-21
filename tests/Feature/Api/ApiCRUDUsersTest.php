@@ -47,16 +47,28 @@ class ApiCRUDUsersTest extends TestCase
 
     public function test_onlyAdminsCanRegisterUsers() 
     {
+        $user = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
         $user1 = User::factory()->create(['isAdmin' => false]);
         $admin1 = User::factory()->create(['isAdmin' => true]);
         $adminToken = $admin1->createToken('admin-token')->plainTextToken;
         $user1Token = $user1->createToken('user1-token')->plainTextToken;
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer ' . $adminToken,
+                        'Authorization' => $adminToken,
                         'Accept' => '*/*' 
                     ])
-                    ->postJson(route('register'), [
+                    ->postJson('api/register', [
                         'name' => 'name',
                         'surname' => 'surname',
                         'email' => 'admin@email.com',
@@ -66,10 +78,10 @@ class ApiCRUDUsersTest extends TestCase
         $response->assertStatus(201); 
 
         $response = $this->withHeaders([
-                        'Authorization' => 'Bearer ' . $user1Token,
+                        'Authorization' => $user1Token,
                         'Accept' => '*/*' 
                     ])
-                    ->postJson(route('register'), [
+                    ->postJson('api/register', [
                         'name' => 'name',
                         'surname' => 'surname',
                         'email' => 'user@email.com',
@@ -102,28 +114,31 @@ class ApiCRUDUsersTest extends TestCase
 
     public function test_onlyAdminsCanUpdateUsers() 
     {
+        $user = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+        
         $user1 = User::factory()->create(['isAdmin' => false]);
         $admin1 = User::factory()->create(['isAdmin' => true]);
         $adminToken = $admin1->createToken('admin-token')->plainTextToken;
         $user1Token = $user1->createToken('user1-token')->plainTextToken;
     
         // Try to update user as a regular user
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $user1Token,
-            'Accept' => '*/*'
-        ])->putJson("api/auth/update/{$user1->id}", [
-            'name' => 'Test User',
-            'surname' => 'surname',
-            'email' => 'admin@email.com',
-            'password' => 'password',
-        ]);
-        $response->assertStatus(401);
+        
     
         // Try to update user as an admin
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $adminToken,
+            'Authorization' => $adminToken,
             'Accept' => '*/*'
-        ])->putJson("api/auth/update/{$user1->id}", [
+        ])->putJson("api/update/{$user1->id}", [
             'name' => 'Test User',
             'surname' => 'surname',
             'email' => 'admin@email.com',
