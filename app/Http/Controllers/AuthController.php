@@ -30,11 +30,13 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Usuario no autorizado'], 401);
         }
+        // User es necesario para saber si es admin o no y usar el resto de datos del user
+        $user = Auth::user();
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $user);
     }
 
     /**
@@ -73,15 +75,17 @@ class AuthController extends Controller
      * Get the token array structure.
      *
      * @param  string $token
+     * @param  User $user Los datos de usuario (por defecto null)
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user = null)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => $user
         ]);
     }
 }
