@@ -12,15 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('absences', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
+            $table->id();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->date('startingDate');
             $table->date('endingDate');
             $table->time('startingTime')->nullable();
             $table->time('endingTime')->nullable();
             $table->string('addDocument')->nullable();
+            $table->string('description')->nullable();
             $table->string('status')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            
             $table->timestamps();
         });
     }

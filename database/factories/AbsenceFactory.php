@@ -20,10 +20,11 @@ class AbsenceFactory extends Factory
             //
             'user_id' => fake()->randomDigit(),
             'startingDate' => fake()->date($format = 'Y-m-d', $max = 'now'),
-            'startingTime' => fake()->time($format = 'H:i', $max = 'now'),
             'endingDate' => fake()->date($format = 'Y-m-d', $max = 'now'),
+            'startingTime' => fake()->time($format = 'H:i', $max = 'now'),
             'endingTime' => fake()->time($format = 'H:i', $max = 'now'),
-            'addDocument' => fake()->imageUrl($width = 640, $height = 480),
+            'description' => fake()->name(),
+            'addDocument' => fake()->imageUrl(),
             'status' => fake()->name(),
         ];
     }

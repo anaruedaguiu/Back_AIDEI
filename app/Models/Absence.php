@@ -15,6 +15,7 @@ class Absence extends Model
         'startingTime',
         'endingDate',
         'endingTime',
+        'description',
         'addDocument',
         'status',
     ];
