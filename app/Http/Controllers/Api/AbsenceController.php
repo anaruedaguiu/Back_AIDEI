@@ -71,5 +71,18 @@ class AbsenceController extends Controller
     public function destroy(string $id)
     {
         //
+        $user = auth()->user();
+
+        $absence = Absence::find($id);
+
+        // Verificar que el usuario es el dueño de la ausencia
+        if ($user->id !== $absence->user_id) {
+            return response()->json(['message' => 'No está autorizado para borrar esta ausencia'], 403);
+        }
+
+        // Borrar la ausencia
+        $absence->delete();
+
+        return response()->json(['message' => 'Ausencia borrada correctamente'], 200);
     }
 }

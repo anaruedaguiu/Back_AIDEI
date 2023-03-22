@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($users as $user) {
             Absence::factory()
-            ->count(7)
+            ->count(1)
             ->create([
                 'user_id' => $user->id
             ]);
