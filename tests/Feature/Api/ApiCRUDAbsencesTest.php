@@ -143,4 +143,60 @@ class ApiCRUDAbsencesTest extends TestCase
         $response->assertStatus(200)
                 ->assertJsonCount(2);
     }
+
+    public function test_anUserCanDeleteHerOwnAbsences()
+    {
+        // Create an user
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $userToken = $user->createToken('user-token')->plainTextToken;
+
+        //Create an user's absence
+        $absence = Absence::factory()->create([
+            'id' => 1,
+            'user_id' => $user->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test1',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        // Login as a regular user
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => 'password',
+        ]);
+
+        // List of user's absences
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*'
+            ])->postJson("api/auth/index");
+        $response->assertStatus(200)
+            ->assertJsonCount(1);
+
+        // Regular user can delete only regular user's absences
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*'
+        ])->delete("api/auth/deleteAbsence/1");
+        $response->assertStatus(200)
+                ->assertJson([
+                    'message' => 'Ausencia borrada correctamente']);
+
+        // List of user's absences after delete
+        /* $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => ''
+            ])->postJson("api/auth/index");
+        $response->assertStatus(200)
+                ->assertJsonCount(0); */
+    }
 }
