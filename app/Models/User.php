@@ -30,7 +30,7 @@ class User extends Authenticatable implements JWTSubject
         'image',
         'startingDate',
         'endingDate',
-        'status',
+        'active',
         'contractType',
         'isAdmin',
     ];
@@ -67,5 +67,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function absences()
+    {
+        return $this->hasMany('App\Models\Absence', 'user_id', 'id');
     }
 }

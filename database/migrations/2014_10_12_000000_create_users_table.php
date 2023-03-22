@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->date('startingDate')->nullable();
             $table->date('endingDate')->nullable();
-            $table->boolean('status')->default(true);
+            $table->boolean('active')->default(true);
             $table->boolean('contractType')->nullable();
             $table->boolean('isAdmin')->default(false);
             $table->rememberToken();
