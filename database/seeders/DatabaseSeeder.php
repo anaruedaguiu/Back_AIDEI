@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             'status' => 'Resuelta: aceptada',
         ]);
 
-        Absence::factory()->create();
+        /* Absence::factory()->create(); */
     }
 }
 
