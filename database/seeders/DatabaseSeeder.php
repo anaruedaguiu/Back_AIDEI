@@ -41,6 +41,28 @@ class DatabaseSeeder extends Seeder
             'status' => 'Resuelta: aceptada',
         ]);
 
+        Absence::factory()->create([
+            'user_id' => 2,
+            'startingDate' => '2023/04/04',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/08',
+            'endingTime' => '20:00:00',
+            'description' => 'Cuatro días para llevar al conejo al vet',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Absence::factory()->create([
+            'user_id' => 3,
+            'startingDate' => '2023/03/21',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/27',
+            'endingTime' => '18:00:00',
+            'description' => 'Paloma precipitada',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
         /* Absence::factory()->create(); */
     }
 }
