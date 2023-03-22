@@ -22,7 +22,7 @@ class ApiCRUDUsersTest extends TestCase
 
     use RefreshDatabase;
 
-    public function test_onlyAdminsCanAccessUsersFullList()
+    public function test_onlyAdminsCanAccessEmployeesFullList()
     {
         // Crea dos usuarios no administradores y dos administradores
         $user1 = User::factory()->create(['isAdmin' => false]);
@@ -31,12 +31,12 @@ class ApiCRUDUsersTest extends TestCase
         $admin2 = User::factory()->create(['isAdmin' => true]);
     
         // Caso en que el usuario es administrador
-        $response = $this->actingAs($admin1)->post(route('home'));
+        $response = $this->actingAs($admin1)->post(route('dashboard'));
         $response->assertStatus(200)
                 ->assertJsonCount(4);
     
         // Caso en que el usuario no es administrador
-        $response = $this->actingAs($user1)->post(route('home'));
+        $response = $this->actingAs($user1)->post(route('dashboard'));
         $response->assertStatus(200)
                 ->assertJsonFragment([
                     'id' => $user1->id,
@@ -45,7 +45,7 @@ class ApiCRUDUsersTest extends TestCase
                 ]);
     }
 
-    public function test_onlyAdminsCanRegisterUsers() 
+    public function test_onlyAdminsCanRegisterEmployees() 
     {
         $user = User::factory()->create([
             'isAdmin' => true,
@@ -68,7 +68,7 @@ class ApiCRUDUsersTest extends TestCase
                         'Authorization' => $adminToken,
                         'Accept' => '*/*' 
                     ])
-                    ->postJson('api/register', [
+                    ->postJson('api/registerEmployee', [
                         'name' => 'name',
                         'surname' => 'surname',
                         'email' => 'admin@email.com',
@@ -81,7 +81,7 @@ class ApiCRUDUsersTest extends TestCase
                         'Authorization' => $user1Token,
                         'Accept' => '*/*' 
                     ])
-                    ->postJson('api/register', [
+                    ->postJson('api/registerEmployee', [
                         'name' => 'name',
                         'surname' => 'surname',
                         'email' => 'user@email.com',
@@ -91,7 +91,7 @@ class ApiCRUDUsersTest extends TestCase
         $response->assertRedirect();
     }
 
-    public function test_onlyAdminsCanDeleteUsers()
+    public function test_onlyAdminsCanDeleteEmployees()
     {
         // Crear usuario administrador
         $admin = User::factory()->create(['isAdmin' => true]);
@@ -100,10 +100,10 @@ class ApiCRUDUsersTest extends TestCase
         $user = User::factory()->create(['isAdmin' => false]);
 
         // Hacer una petición DELETE para eliminar al usuario no administrador
-        $response = $this->actingAs($admin, 'api')->delete(route('deleteUser', $user->id));
+        $response = $this->actingAs($admin, 'api')->delete(route('deleteEmployee', $user->id));
 
         // Hacer una petición DELETE como el usuario no administrador
-        $response = $this->actingAs($user, 'api')->delete(route('deleteUser', $admin->id));
+        $response = $this->actingAs($user, 'api')->delete(route('deleteEmployee', $admin->id));
 
         // Verificar que la respuesta tenga el código HTTP 403 (prohibido)
         $response->assertForbidden();
@@ -112,7 +112,7 @@ class ApiCRUDUsersTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $admin->id]);
     }
 
-    public function test_onlyAdminsCanUpdateUsers() 
+    public function test_onlyAdminsCanUpdateEmployees() 
     {
         $user = User::factory()->create([
             'isAdmin' => true,
@@ -138,7 +138,7 @@ class ApiCRUDUsersTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => $adminToken,
             'Accept' => '*/*'
-        ])->putJson("api/update/{$user1->id}", [
+        ])->putJson("api/updateEmployee/{$user1->id}", [
             'name' => 'Test User',
             'surname' => 'surname',
             'email' => 'admin@email.com',

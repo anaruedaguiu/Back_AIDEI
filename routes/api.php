@@ -31,7 +31,7 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('profile', [AuthController::class, 'profile'])->name('profile');
-    Route::post('home', [UserController::class, 'home'])->name('home');
+    Route::post('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
 
 });
 
@@ -43,9 +43,9 @@ Route::group([
 ], function () {
 
     // for all admins
-    Route::post('register', [UserController::class, 'register']);
-    Route::delete('deleteUser/{id}', [UserController::class, 'destroy'])->name('deleteUser');
-    Route::put('update/{id}', [UserController::class, 'update'])->name('update');
+    Route::post('registerEmployee', [UserController::class, 'registerEmployee']);
+    Route::delete('deleteEmployee/{id}', [UserController::class, 'deleteEmployee'])->name('deleteEmployee');
+    Route::put('updateEmployee/{id}', [UserController::class, 'updateEmployee'])->name('updateEmployee');
 });
 
 

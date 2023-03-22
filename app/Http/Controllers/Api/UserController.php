@@ -18,7 +18,7 @@ class UserController extends Controller
         $this->middleware(['auth:api']);
     }
     
-    public function home(Request $request)
+    public function dashboard(Request $request)
     {
         $user = auth()->user();
 
@@ -34,7 +34,7 @@ class UserController extends Controller
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    public function register(Request $request)
+    public function registerEmployee(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name'=> 'required',
@@ -59,7 +59,7 @@ class UserController extends Controller
         ],201);
     }
 
-    public function destroy ($id)
+    public function deleteEmployee ($id)
     {
         $user = User::find($id);
 
@@ -77,7 +77,7 @@ class UserController extends Controller
         return response()->json($user, 200);
     } 
 
-    public function update(Request $request, $id)
+    public function updateEmployee(Request $request, $id)
     {
         //
         $user = User::find($id);
