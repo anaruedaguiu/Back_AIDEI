@@ -64,6 +64,16 @@ class DatabaseSeeder extends Seeder
         ]);
 
         /* Absence::factory()->create(); */
+
+        $users = User::all();
+
+        foreach ($users as $user) {
+            Absence::factory()
+            ->count(7)
+            ->create([
+                'user_id' => $user->id
+            ]);
+        }
     }
 }
 
