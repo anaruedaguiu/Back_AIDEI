@@ -28,9 +28,24 @@ class AbsenceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createAbsence()
     {
         //
+        $user = auth()->user();
+
+        $absence = Absence::create([
+            'user_id' => $user->id,
+            'startingDate' => request('startingDate'),
+            'endingDate'=> request('endingDate'),
+            'startingTime'=> request('startingTime'),
+            'endingTime'=> request('endingTime'),
+            'addDocument'=> request('addDocument'),
+            'description'=> request('description'),
+        ]);
+
+        $absence->save();
+        
+        return response()->json($absence, 201);
     }
 
     /**
