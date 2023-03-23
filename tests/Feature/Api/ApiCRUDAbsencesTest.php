@@ -143,4 +143,44 @@ class ApiCRUDAbsencesTest extends TestCase
         $response->assertStatus(200)
                 ->assertJsonCount(2);
     }
+
+    public function test_userCanCreateOwnAbsences()
+    {
+        // Create a regular user
+        $user = User::create([
+            'isAdmin' => false,
+            'name' => 'userName',
+            'surname' => 'userSurname',
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Authenticate the user and get the token
+        $userToken = $user->createToken('user-token')->plainTextToken;
+
+        // Create an absence as regular user
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*' 
+        ])->postJson('api/auth/createAbsence', [
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test',
+        ]);
+
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Ausencia solicitada exitosamente',
+                    'absence' => [
+                        'user_id' => $user->id,
+                        'startingDate' => '2023/03/01',
+                        'startingTime' => '18:00:00',
+                        'endingDate' => '2023/03/02',
+                        'endingTime' => '18:00:00',
+                        'description' => 'description test',
+                    ]
+                ]);
+    }
 }
