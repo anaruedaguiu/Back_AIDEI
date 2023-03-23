@@ -54,7 +54,7 @@ class UserController extends Controller
 
 
         return response()->json([
-            'message' => '¡Usuario registrado exitosamente!',
+            'message' => '¡Registro realizado exitosamente!',
             'user' => $user
         ],201);
     }
@@ -64,7 +64,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json(['error' => 'Usuario no encontrado'], 404);
+            return response()->json(['error' => 'Registro no encontrado'], 404);
         }
 
         if(!auth()->user()->isAdmin) {
@@ -73,7 +73,7 @@ class UserController extends Controller
         
         $user->delete();
         
-        return response()->json(['message' => 'Usuario eliminado exitosamente'], 200);
+        return response()->json(['message' => 'Registro eliminado exitosamente'], 200);
         return response()->json($user, 200);
     } 
 
