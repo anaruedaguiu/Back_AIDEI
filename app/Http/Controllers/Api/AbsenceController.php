@@ -77,7 +77,7 @@ class AbsenceController extends Controller
 
         // Verificar que el usuario es el dueño de la ausencia
         if ($user->id !== $absence->user_id) {
-            return response()->json(['message' => 'No está autorizado para borrar esta ausencia'], 403);
+            return response()->json(['message' => 'No tienes permiso para borrar esta ausencia'], 403);
         }
 
         // Borrar la ausencia
