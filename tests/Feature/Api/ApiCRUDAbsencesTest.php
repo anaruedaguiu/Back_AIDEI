@@ -147,17 +147,17 @@ class ApiCRUDAbsencesTest extends TestCase
     public function test_anUserCanDeleteHerOwnAbsences()
     {
         // Create an user
-        $user = User::factory()->create([
+        $user1 = User::factory()->create([
             'isAdmin' => false,
-            'email' => 'user@example.com',
+            'email' => 'user1@example.com',
             'password' => bcrypt('password'),
         ]);
-        $userToken = $user->createToken('user-token')->plainTextToken;
+        $user1Token = $user1->createToken('user1-token')->plainTextToken;
 
         //Create an user's absence
         $absence = Absence::factory()->create([
             'id' => 1,
-            'user_id' => $user->id,
+            'user_id' => $user1->id,
             'startingDate' => '2023/03/01',
             'startingTime' => '18:00:00',
             'endingDate' => '2023/03/02',
@@ -170,13 +170,13 @@ class ApiCRUDAbsencesTest extends TestCase
         // Login as a regular user
         $response = $this->json('POST', 'api/auth/login', [
             'isAdmin' => false,
-            'email' => 'user@example.com',
+            'email' => 'user1@example.com',
             'password' => 'password',
         ]);
 
         // List of user's absences
         $response = $this->withHeaders([
-            'Authorization' => $userToken,
+            'Authorization' => $user1Token,
             'Accept' => '*/*'
             ])->postJson("api/auth/index");
         $response->assertStatus(200)
@@ -184,19 +184,24 @@ class ApiCRUDAbsencesTest extends TestCase
 
         // Regular user can delete only regular user's absences
         $response = $this->withHeaders([
-            'Authorization' => $userToken,
+            'Authorization' => $user1Token,
             'Accept' => '*/*'
-        ])->delete("api/auth/deleteAbsence/1");
+        ])->delete("api/auth/deleteAbsence/{$absence->id}");
         $response->assertStatus(200)
                 ->assertJson([
                     'message' => 'Ausencia borrada correctamente']);
 
         // List of user's absences after delete
         /* $response = $this->withHeaders([
-            'Authorization' => $userToken,
+            'Authorization' => $user1Token,
             'Accept' => ''
             ])->postJson("api/auth/index");
         $response->assertStatus(200)
                 ->assertJsonCount(0); */
+
+        // Verify absence has been deleted in database
+        $this->assertDatabaseMissing('absences', [
+            'id' => $absence->id,
+        ]);
     }
 }
