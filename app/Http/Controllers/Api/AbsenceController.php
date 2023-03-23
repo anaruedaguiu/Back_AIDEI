@@ -45,7 +45,7 @@ class AbsenceController extends Controller
 
         $absence->save();
         
-        return response()->json($absence, 201);
+        return response()->json(['message' => 'Ausencia solicitada exitosamente', 'absence' => $absence], 201);
     }
 
     /**
