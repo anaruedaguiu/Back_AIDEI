@@ -109,7 +109,7 @@ class ApiCRUDAbsencesTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => $adminToken,
             'Accept' => '*/*'
-        ])->postJson("api/auth/index");
+        ])->postJson("api/auth/absences");
         $response->assertStatus(200)
                 ->assertJsonCount(4);
 
@@ -124,7 +124,7 @@ class ApiCRUDAbsencesTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => $userToken,
             'Accept' => '*/*'
-        ])->postJson("api/auth/index");
+        ])->postJson("api/auth/absences");
         $response->assertStatus(200)
                 ->assertJsonCount(1);
 
@@ -139,7 +139,7 @@ class ApiCRUDAbsencesTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => $user2Token,
             'Accept' => '*/*'
-        ])->postJson("api/auth/index");
+        ])->postJson("api/auth/absences");
         $response->assertStatus(200)
                 ->assertJsonCount(2);
     }
@@ -178,7 +178,7 @@ class ApiCRUDAbsencesTest extends TestCase
         $response = $this->withHeaders([
             'Authorization' => $userToken,
             'Accept' => '*/*'
-            ])->postJson("api/auth/index");
+            ])->postJson("api/auth/absences");
         $response->assertStatus(200)
             ->assertJsonCount(1);
 
@@ -195,7 +195,7 @@ class ApiCRUDAbsencesTest extends TestCase
         /* $response = $this->withHeaders([
             'Authorization' => $user1Token,
             'Accept' => ''
-            ])->postJson("api/auth/index");
+            ])->postJson("api/auth/absences");
         $response->assertStatus(200)
                 ->assertJsonCount(0); */
 
@@ -205,3 +205,4 @@ class ApiCRUDAbsencesTest extends TestCase
         ]);
     }
 }
+
