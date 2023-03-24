@@ -11,14 +11,16 @@ class AbsenceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function absences()
     {
         //
         $user = auth()->user();
     
         if ($user->isAdmin) {
             $absences = Absence::all();
-        } else {
+        } 
+        
+        if (!$user->isAdmin) {
             $absences = $user->absences;
         }
         
@@ -33,8 +35,16 @@ class AbsenceController extends Controller
         //
         $user = auth()->user();
 
+        if ($user->isAdmin && request('user_id')) {
+            $user_id = request('user_id');
+        } 
+        
+        if (!$user->isAdmin) {
+            $user_id = $user->id;
+        }
+
         $absence = Absence::create([
-            'user_id' => $user->id,
+            'user_id' => $user_id,
             'startingDate' => request('startingDate'),
             'endingDate'=> request('endingDate'),
             'startingTime'=> request('startingTime'),

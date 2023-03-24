@@ -33,7 +33,7 @@ Route::group([
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::post('index', [AbsenceController::class, 'index'])->name('index');
+    Route::post('absences', [AbsenceController::class, 'absences'])->name('absences');
     Route::post('createAbsence', [AbsenceController::class, 'createAbsence'])->name('createAbsence');
 
 });
