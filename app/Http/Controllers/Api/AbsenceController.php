@@ -98,3 +98,4 @@ class AbsenceController extends Controller
         //
     }
 }
+
