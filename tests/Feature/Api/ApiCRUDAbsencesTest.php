@@ -144,20 +144,20 @@ class ApiCRUDAbsencesTest extends TestCase
                 ->assertJsonCount(2);
     }
 
-    public function test_anUserCanDeleteHerOwnAbsences()
+    public function test_anUserCanDeleteOwnAbsences()
     {
-        // Create an user
-        $user1 = User::factory()->create([
+        // Create a regular user called user1
+        $user = User::factory()->create([
             'isAdmin' => false,
-            'email' => 'user1@example.com',
+            'email' => 'user@example.com',
             'password' => bcrypt('password'),
         ]);
-        $user1Token = $user1->createToken('user1-token')->plainTextToken;
+        $userToken = $user->createToken('user-token')->plainTextToken;
 
         //Create an user's absence
         $absence = Absence::factory()->create([
             'id' => 1,
-            'user_id' => $user1->id,
+            'user_id' => $user->id,
             'startingDate' => '2023/03/01',
             'startingTime' => '18:00:00',
             'endingDate' => '2023/03/02',
@@ -170,21 +170,21 @@ class ApiCRUDAbsencesTest extends TestCase
         // Login as a regular user
         $response = $this->json('POST', 'api/auth/login', [
             'isAdmin' => false,
-            'email' => 'user1@example.com',
+            'email' => 'user@example.com',
             'password' => 'password',
         ]);
 
         // List of user's absences
         $response = $this->withHeaders([
-            'Authorization' => $user1Token,
+            'Authorization' => $userToken,
             'Accept' => '*/*'
             ])->postJson("api/auth/index");
         $response->assertStatus(200)
             ->assertJsonCount(1);
 
-        // Regular user can delete only regular user's absences
+        // Regular user can delete only regular user1's absences
         $response = $this->withHeaders([
-            'Authorization' => $user1Token,
+            'Authorization' => $userToken,
             'Accept' => '*/*'
         ])->delete("api/auth/deleteAbsence/{$absence->id}");
         $response->assertStatus(200)
