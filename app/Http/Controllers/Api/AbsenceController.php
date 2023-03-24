@@ -68,8 +68,24 @@ class AbsenceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function deleteAbsence(string $id)
     {
         //
+        $user = auth()->user();
+
+        $absence = Absence::find($id);
+
+        // Verificar que el usuario es el dueño de la ausencia
+        if ($user->id !== $absence->user_id) {
+            // Verificar si es admin 
+            if(!$user->isAdmin) {
+                return response()->json(['message' =>'No tienes permiso para borrar esta ausencia'], 403);
+            }
+        }
+
+        // Borrar la ausencia
+        $absence->delete();
+
+        return response()->json(['message' => 'Ausencia borrada correctamente'], 200);
     }
 }
