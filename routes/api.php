@@ -33,8 +33,8 @@ Route::group([
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::delete('deleteAbsence/{id}', [AbsenceController::class, 'deleteAbsence'])->name('deleteAbsence');
     Route::post('absences', [AbsenceController::class, 'absences'])->name('absences');
+    Route::delete('deleteAbsence/{id}', [AbsenceController::class, 'deleteAbsence'])->name('deleteAbsence');
     Route::post('createAbsence', [AbsenceController::class, 'createAbsence'])->name('createAbsence');
 
 });
