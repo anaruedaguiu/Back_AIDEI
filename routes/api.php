@@ -36,6 +36,7 @@ Route::group([
     Route::post('absences', [AbsenceController::class, 'absences'])->name('absences');
     Route::delete('deleteAbsence/{id}', [AbsenceController::class, 'deleteAbsence'])->name('deleteAbsence');
     Route::post('createAbsence', [AbsenceController::class, 'createAbsence'])->name('createAbsence');
+    Route::put('updateAbsence/{id}', [AbsenceController::class, 'updateAbsence'])->name('updateAbsence');
 
 });
 
