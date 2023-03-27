@@ -85,9 +85,36 @@ class AbsenceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateAbsence(Request $request, string $id)
     {
         //
+        $user = auth()->user();
+
+        $absence = Absence::find($id);
+
+        // Verificar que la ausencia pertenece a esa persona
+        if ($user->id !== $absence->user_id) {
+            // Verificar si es admin 
+            if(!$user->isAdmin) {
+                return response()->json(['message' =>'No tienes permiso para modificar esta ausencia'], 403);
+            }
+        }
+
+        // Modificar la ausencia
+
+        $absence->update([
+            'startingDate' => request('startingDate'),
+            'endingDate'=> request('endingDate'),
+            'startingTime'=> request('startingTime'),
+            'endingTime'=> request('endingTime'),
+            'addDocument'=> request('addDocument'),
+            'description'=> request('description'),
+        ]);
+
+        // Guardar la modificación
+        $absence->save();
+
+        return response()->json(['message' => 'Ausencia modificada correctamente'], 200);
     }
 
     /**
@@ -100,7 +127,7 @@ class AbsenceController extends Controller
 
         $absence = Absence::find($id);
 
-        // Verificar que el usuario es el dueño de la ausencia
+        // Verificar que la ausencia pertenece a esa persona
         if ($user->id !== $absence->user_id) {
             // Verificar si es admin 
             if(!$user->isAdmin) {
