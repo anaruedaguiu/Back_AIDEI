@@ -205,44 +205,168 @@ class ApiCRUDAbsencesTest extends TestCase
         ]);
     }
 
-    public function test_userCanCreateOwnAbsences() {
-
-        // Create an admin and regular users
-        $admin = User::factory()->create([
-            'isAdmin' => true,
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
-        ]);
-        $adminToken = $admin->createToken('admin-token')->plainTextToken;
-        
-        $user = User::factory()->create([
+    public function test_userCanCreateOwnAbsences()
+    {
+        // Create two regulars user
+        $user = User::create([
             'isAdmin' => false,
+            'name' => 'userName',
+            'surname' => 'userSurname',
             'email' => 'user@example.com',
             'password' => bcrypt('password'),
         ]);
-        $userToken = $user->createToken('user-token')->plainTextToken;
 
-        $user1 = User::factory()->create([
+        $otherUser = User::create([
             'isAdmin' => false,
-            'email' => 'user1@example.com',
+            'name' => 'otherUserName',
+            'surname' => 'otherUserSurname',
+            'email' => 'otheruser@example.com',
             'password' => bcrypt('password'),
         ]);
-        $user1Token = $user1->createToken('user1-token')->plainTextToken;
 
-        // Login and create a new absence as an admin 
+        // Authenticate the user and get the token
+        $userToken = $user->createToken('user-token')->plainTextToken;
+
+        // Login as an user
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => 'password',
+        ]);
+
+        // Create an absence as regular user
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*' 
+        ])->postJson('api/auth/createAbsence', [
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test',
+        ]);
+
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Ausencia solicitada exitosamente',
+                    'absence' => [
+                        'user_id' => $user->id,
+                        'startingDate' => '2023/03/01',
+                        'startingTime' => '18:00:00',
+                        'endingDate' => '2023/03/02',
+                        'endingTime' => '18:00:00',
+                        'description' => 'description test',
+                    ]
+                ]);
+
+        // Create an other user's abscence as regular user
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*' 
+        ])->postJson('api/auth/createAbsence', [
+            'user_id' => $otherUser->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test',
+        ]);
+
+        //Even if you pass the id of another user it creates the absence of the logged in user.
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Ausencia solicitada exitosamente',
+                    'absence' => [
+                        'user_id' => $user->id,
+                        'startingDate' => '2023/03/01',
+                        'startingTime' => '18:00:00',
+                        'endingDate' => '2023/03/02',
+                        'endingTime' => '18:00:00',
+                        'description' => 'description test',
+                    ]
+                ]);
+    }
+
+    public function test_adminCanCreateOwnAndUsersAbsences()
+    {
+        // Create an admin
+        $admin = User::create([
+            'isAdmin' => true,
+            'name' => 'adminName',
+            'surname' => 'adminSurname',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        // Create a regular user
+        $user = User::create([
+            'isAdmin' => false,
+            'name' => 'userName',
+            'surname' => 'userSurname',
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Authenticate the admin and get the token
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
+
+        // Login as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        // Create an own absence as admin
         $response = $this->withHeaders([
             'Authorization' => $adminToken,
             'Accept' => '*/*' 
-        ])->postJson("api/auth/createAbsence", [
-                'user_id' => $user->id,
-                'startingDate' => '2023/03/01',
-                'startingTime' => '18:00:00',
-                'endingDate' => '2023/03/02',
-                'endingTime' => '18:00:00',
-                'description' => 'description create test',
+        ])->postJson('api/auth/createAbsence', [
+            'user_id' => $admin->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test',
         ]);
 
-        $response->assertStatus(201); 
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Ausencia solicitada exitosamente',
+                    'absence' => [
+                        'user_id' => $admin->id,
+                        'startingDate' => '2023/03/01',
+                        'startingTime' => '18:00:00',
+                        'endingDate' => '2023/03/02',
+                        'endingTime' => '18:00:00',
+                        'description' => 'description test',
+                    ]
+                ]);
+
+        // Create an user's absence as admin
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*' 
+        ])->postJson('api/auth/createAbsence', [
+            'user_id' => $user->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test',
+        ]);
+
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Ausencia solicitada exitosamente',
+                    'absence' => [
+                        'user_id' => $user->id,
+                        'startingDate' => '2023/03/01',
+                        'startingTime' => '18:00:00',
+                        'endingDate' => '2023/03/02',
+                        'endingTime' => '18:00:00',
+                        'description' => 'description test',
+                    ]
+                ]);
     }
 }
 
