@@ -33,9 +33,20 @@ class DatabaseSeeder extends Seeder
         
         Absence::factory()->create([
             'user_id' => 2,
-            'startingDate' => '2023/03/21',
+            'startingDate' => '2023/05/15',
             'startingTime' => '18:00:00',
-            'endingDate' => '2023/03/27',
+            'endingDate' => '2023/09/14',
+            'endingTime' => '18:00:00',
+            'description' => 'Baja maternidad',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Absence::factory()->create([
+            'user_id' => 2,
+            'startingDate' => '2023/09/15',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/10/14',
             'endingTime' => '18:00:00',
             'description' => 'Permiso de lactancia',
             'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
@@ -43,23 +54,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Absence::factory()->create([
-            'user_id' => 2,
-            'startingDate' => '2023/04/04',
-            'startingTime' => '18:00:00',
-            'endingDate' => '2023/04/08',
-            'endingTime' => '20:00:00',
-            'description' => 'Cuatro días para llevar al conejo al vet',
-            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
-            'status' => 'Resuelta: aceptada',
-        ]);
-
-        Absence::factory()->create([
             'user_id' => 3,
-            'startingDate' => '2023/03/21',
+            'startingDate' => '2023/03/29',
             'startingTime' => '18:00:00',
-            'endingDate' => '2023/03/27',
+            'endingDate' => '2023/03/31',
             'endingTime' => '18:00:00',
-            'description' => 'Paloma precipitada',
+            'description' => 'Mudanza',
             'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
             'status' => 'Resuelta: aceptada',
         ]);
