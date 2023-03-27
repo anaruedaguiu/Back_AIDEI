@@ -234,6 +234,7 @@ class ApiCRUDAbsencesTest extends TestCase
             'Authorization' => $adminToken,
             'Accept' => '*/*' 
         ])->postJson("api/auth/createAbsence", [
+                'user_id' => $user->id,
                 'startingDate' => '2023/03/01',
                 'startingTime' => '18:00:00',
                 'endingDate' => '2023/03/02',
