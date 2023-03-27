@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
 use App\Models\Absence;
+use App\Models\Holiday;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -65,10 +66,57 @@ class DatabaseSeeder extends Seeder
 
         /* Absence::factory()->create(); */
 
+        Holiday::factory()->create([
+            'user_id' => 2,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 3,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 4,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 5,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 6,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 7,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
         $users = User::all();
 
         foreach ($users as $user) {
             Absence::factory()
+            ->count(1)
+            ->create([
+                'user_id' => $user->id
+            ]);
+            Holiday::factory()
             ->count(1)
             ->create([
                 'user_id' => $user->id
