@@ -16,7 +16,7 @@ class Holiday extends Model
         'status',
     ];
 
-    public function userHoliday()
+    public function user()
     {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
     }

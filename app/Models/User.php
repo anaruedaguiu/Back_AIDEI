@@ -76,6 +76,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function holidays()
     {
-        return $this->hasMany('App\Models\Absence', 'user_id', 'id');
+        return $this->hasMany('App\Models\Holiday', 'user_id', 'id');
     }
 }

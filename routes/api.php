@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AbsenceController;
+use App\Http\Controllers\Api\HolidayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,7 @@ Route::group([
     Route::post('createAbsence', [AbsenceController::class, 'createAbsence'])->name('createAbsence');
     Route::put('updateAbsence/{id}', [AbsenceController::class, 'updateAbsence'])->name('updateAbsence');
     Route::post('showAbsence/{id}', [AbsenceController::class, 'showAbsence'])->name('showAbsence');
+    Route::post('holidays', [HolidayController::class, 'holidays'])->name('holidays');
 });
 
 Route::group([
