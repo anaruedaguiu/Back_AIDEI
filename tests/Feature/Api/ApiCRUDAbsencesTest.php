@@ -859,4 +859,3 @@ class ApiCRUDAbsencesTest extends TestCase
                     'message' => 'No tienes permiso para modificar esta ausencia']);
     }
 }
-
