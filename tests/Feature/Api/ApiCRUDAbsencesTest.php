@@ -508,9 +508,175 @@ class ApiCRUDAbsencesTest extends TestCase
         ])->postJson("api/auth/showAbsence/3");
 
         $response->assertStatus(403)
-        ->assertJson([
-            'message' => 'No tienes permiso para ver esta ausencia']);
+                ->assertJson([
+                    'message' => 'No tienes permiso para ver esta ausencia']);
     }
 
+    public function test_adminCanUpdateAllAbsences() 
+    {
+        // Create an admin and regular users
+        $admin = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
+
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Create absences
+        $absence1 = Absence::factory()->create([
+            'id' => 1,
+            'user_id' => $user->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test1',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $absence2 = Absence::factory()->create([
+            'id' => 2,
+            'user_id' => $admin->id,
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test2',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        // Login as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        // Admin can update an user1's absence
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->putJson("api/auth/updateAbsence/1", [
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'user description updated by admin',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertEquals('user description updated by admin', $absence1->fresh()->description);
+
+        // And Admin can update own absences
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->putJson("api/auth/updateAbsence/2", [
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'admin description updated by admin',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertEquals('admin description updated by admin', $absence2->fresh()->description);
+    }
+
+    public function test_anUserOnlyCanUpdateOwnAbsences() 
+    {
+        // Create an user and an admin
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $userToken = $user->createToken('user-token')->plainTextToken;
+
+        $admin = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Create absences
+        $absence1 = Absence::factory()->create([
+            'id' => 1,
+            'user_id' => $user->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test1',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $absence2 = Absence::factory()->create([
+            'id' => 2,
+            'user_id' => $admin->id,
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test2',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        // Login as an user
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => 'password',
+        ]);
+
+        // User only can update user's absences
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*'
+        ])->putJson("api/auth/updateAbsence/1", [
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'user description updated by user',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertEquals('user description updated by user', $absence1->fresh()->description);
+
+        // User can't update other absences
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*'
+        ])->putJson("api/auth/updateAbsence/2", [
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'admin description updated by user',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $response->assertStatus(403)
+                ->assertJson([
+                    'message' => 'No tienes permiso para modificar esta ausencia']);
+    }
 }
 
