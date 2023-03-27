@@ -64,14 +64,82 @@ class ApiCRUDAuthTest extends TestCase
 
     public function test_adminAndEmployeesProfileCanBeShowed()
     {
-        $userTest = User::factory()->create();
-        $this->assertCount(1, User::all());
-        
-        $response=$this->actingAs($userTest)->postJson(route('profile', $userTest->id));
+        // Create an admin and regular user
+        $admin = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
 
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $userToken = $user->createToken('user-token')->plainTextToken;
+
+        // Login as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        // Admin can access users full list 
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/dashboard");
+        $response->assertStatus(200)
+                ->assertJsonCount(2);
+
+        // Login as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        // Admin can see user's profile
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/profile/1");
         $response->assertStatus(200);
-
+        
         $this->assertNotEmpty($response);
-    }
 
+        // Admin can see user's profile
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/profile/2");
+        $response->assertStatus(200);
+        
+        $this->assertNotEmpty($response);
+
+        // Login as an user
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => 'password',
+        ]);
+
+        // User can see only own profile
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/profile/2");
+        $response->assertStatus(200);
+        
+        $this->assertNotEmpty($response);
+
+        // User can't see other's profile
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/profile/1");
+        $response->assertStatus(403);
+    }
 }
