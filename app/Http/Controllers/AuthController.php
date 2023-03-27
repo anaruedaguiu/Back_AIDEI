@@ -44,9 +44,22 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function profile()
+    public function profile(string $id)
     {
-        return response()->json(auth()->user());
+        $user = User::find($id);
+
+        if (auth()->user()->isAdmin) {
+            // Si el usuario actual es un administrador, puede ver cualquier perfil
+            return response()->json($user);
+        }
+
+        if (auth()->id() !== $user->id) {
+            // Si el usuario actual no es el dueño del perfil, devuelve un error 403
+            return response()->json(['message' =>'No tienes permiso para ver este perfil'], 403);
+        }
+
+        // Si el usuario actual es el dueño del perfil, puede ver su propio perfil
+        return response()->json($user);
     }
 
     /**

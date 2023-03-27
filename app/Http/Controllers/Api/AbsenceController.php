@@ -153,4 +153,3 @@ class AbsenceController extends Controller
         return response()->json(['message' => 'Ausencia borrada correctamente'], 200);
     }
 }
-
