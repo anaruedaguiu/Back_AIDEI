@@ -47,7 +47,7 @@ class ApiCRUDUsersTest extends TestCase
 
     public function test_onlyAdminsCanRegisterEmployees() 
     {
-        $user = User::factory()->create([
+        $admin = User::factory()->create([
             'isAdmin' => true,
             'email' => 'admin@example.com',
             'password' => bcrypt('password'),
@@ -60,8 +60,8 @@ class ApiCRUDUsersTest extends TestCase
         ]);
 
         $user1 = User::factory()->create(['isAdmin' => false]);
-        $admin1 = User::factory()->create(['isAdmin' => true]);
-        $adminToken = $admin1->createToken('admin-token')->plainTextToken;
+        $admin = User::factory()->create(['isAdmin' => true]);
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
         $user1Token = $user1->createToken('user1-token')->plainTextToken;
 
         $response = $this->withHeaders([
@@ -84,7 +84,7 @@ class ApiCRUDUsersTest extends TestCase
                     ->postJson('api/registerEmployee', [
                         'name' => 'name',
                         'surname' => 'surname',
-                        'email' => 'user@email.com',
+                        'email' => 'user1@email.com',
                         'password' => 'password',
                     ]);
 

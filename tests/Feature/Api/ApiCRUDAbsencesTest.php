@@ -204,5 +204,44 @@ class ApiCRUDAbsencesTest extends TestCase
             'id' => $absence->id,
         ]);
     }
+
+    public function test_userCanCreateOwnAbsences() {
+
+        // Create an admin and regular users
+        $admin = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
+        
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $userToken = $user->createToken('user-token')->plainTextToken;
+
+        $user1 = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user1@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $user1Token = $user1->createToken('user1-token')->plainTextToken;
+
+        // Login and create a new absence as an admin 
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*' 
+        ])->postJson("api/auth/createAbsence", [
+                'startingDate' => '2023/03/01',
+                'startingTime' => '18:00:00',
+                'endingDate' => '2023/03/02',
+                'endingTime' => '18:00:00',
+                'description' => 'description create test',
+        ]);
+
+        $response->assertStatus(201); 
+    }
 }
 
