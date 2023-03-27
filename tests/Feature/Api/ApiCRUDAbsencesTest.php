@@ -205,7 +205,7 @@ class ApiCRUDAbsencesTest extends TestCase
         ]);
     }
     
-    public function test_anAbsenceCanBeShowed()
+    public function test_allAbsencesCanBeShowedForAdminAndAnUserOnlyCanShowOwnAbsences()
     {
         // Create an admin and regular users
         $admin = User::factory()->create([
@@ -343,7 +343,9 @@ class ApiCRUDAbsencesTest extends TestCase
             'Accept' => '*/*'
         ])->postJson("api/auth/showAbsence/3");
 
-        $response->assertStatus(403);
+        $response->assertStatus(403)
+        ->assertJson([
+            'message' => 'No tienes permiso para ver esta ausencia']);
     }
 }
 
