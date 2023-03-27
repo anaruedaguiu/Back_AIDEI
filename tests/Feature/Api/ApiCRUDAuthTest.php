@@ -21,7 +21,7 @@ class ApiCRUDAuthTest extends TestCase
 
     use RefreshDatabase;
 
-    public function test_userCanLogin() 
+    public function test_adminAndEmployeesCanLogin() 
     {
         $user = User::factory()->create([
             'email' => 'user@example.com',
@@ -41,7 +41,7 @@ class ApiCRUDAuthTest extends TestCase
         ]);
     }
 
-    public function test_userCanLogout()
+    public function test_adminAndEmployeesCanLogout()
     {
         $user = User::factory()->create([
             'email' => 'user@example.com',
@@ -62,7 +62,7 @@ class ApiCRUDAuthTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_userProfileCanBeShowed()
+    public function test_adminAndEmployeesProfileCanBeShowed()
     {
         $userTest = User::factory()->create();
         $this->assertCount(1, User::all());

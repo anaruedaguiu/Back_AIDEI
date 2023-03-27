@@ -144,20 +144,27 @@ class ApiCRUDAbsencesTest extends TestCase
                 ->assertJsonCount(2);
     }
 
-    public function test_anUserCanDeleteOwnAbsences()
+    public function test_anEmployeeCanDeleteOwnAbsences()
     {
-        // Create a regular user called user1
-        $user = User::factory()->create([
+        // Create regular users
+        $user1 = User::factory()->create([
             'isAdmin' => false,
-            'email' => 'user@example.com',
+            'email' => 'user1@example.com',
             'password' => bcrypt('password'),
         ]);
-        $userToken = $user->createToken('user-token')->plainTextToken;
+        $user1Token = $user1->createToken('user1-token')->plainTextToken;
 
-        //Create an user's absence
-        $absence = Absence::factory()->create([
+        $user2 = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user2@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $user2Token = $user2->createToken('user2-token')->plainTextToken;
+
+        //Create absences for user1 and user2
+        $absence1 = Absence::factory()->create([
             'id' => 1,
-            'user_id' => $user->id,
+            'user_id' => $user1->id,
             'startingDate' => '2023/03/01',
             'startingTime' => '18:00:00',
             'endingDate' => '2023/03/02',
@@ -167,45 +174,218 @@ class ApiCRUDAbsencesTest extends TestCase
             'status' => 'Resuelta: aceptada',
         ]);
 
-        // Login as a regular user
+        $absence2 = Absence::factory()->create([
+            'id' => 2,
+            'user_id' => $user2->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test2',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        // Login as regular user1
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user1@example.com',
+            'password' => 'password',
+        ]);
+
+        // List of regular user1's absences
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+            ])->postJson("api/auth/absences");
+        $response->assertStatus(200)
+            ->assertJsonCount(1);
+
+        // Regular user1 can delete only regular user1's absences
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+        ])->delete("api/auth/deleteAbsence/1");
+        $response->assertStatus(200)
+                ->assertJson([
+                    'message' => 'Ausencia borrada correctamente']);
+
+        // Verify absence1 has been deleted in database
+        $this->assertDatabaseMissing('absences', [
+            'id' => $absence1->id,
+        ]);
+
+        // Login again as regular user1
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user1@example.com',
+            'password' => 'password',
+        ]);
+
+        // List of regular user1's absences after delete
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+            ])->postJson("api/auth/absences");
+        $response->assertStatus(200)
+                ->assertJsonCount(0);
+
+        // Login again as regular user1
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user1@example.com',
+            'password' => 'password',
+        ]);
+
+        // Regular user1 can't delete user2's absence
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+        ])->delete("api/auth/deleteAbsence/2");
+        $response->assertStatus(403)
+                ->assertJson([
+                    'message' => 'No tienes permiso para borrar esta ausencia']);
+
+        // Login as regular user2
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user2@example.com',
+            'password' => 'password',
+        ]);
+
+        // User2 still have absence2
+        $response = $this->withHeaders([
+            'Authorization' => $user2Token,
+            'Accept' => '*/*'
+            ])->postJson("api/auth/absences");
+        $response->assertStatus(200)
+            ->assertJsonCount(1);
+    }
+
+    public function test_adminCanDeleteAllAbsences()
+    {
+        // Create an admin and a regular user
+        $admin = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
+
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $userToken = $user->createToken('user-token')->plainTextToken;
+
+        //Create absences for admin and user
+        $absence1 = Absence::factory()->create([
+            'id' => 1,
+            'user_id' => $admin->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test1',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $absence2 = Absence::factory()->create([
+            'id' => 2,
+            'user_id' => $user->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test2',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        // Login as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        // List of admin's absences
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+            ])->postJson("api/auth/absences");
+        $response->assertStatus(200)
+            ->assertJsonCount(2);
+
+        // Admin can delete own absences
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->delete("api/auth/deleteAbsence/1");
+        $response->assertStatus(200)
+                ->assertJson([
+                    'message' => 'Ausencia borrada correctamente']);
+
+        // Verify absence1 has been deleted in database
+        $this->assertDatabaseMissing('absences', [
+            'id' => $absence1->id,
+        ]);
+
+        // Login again as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        // List of admin's absences after delete
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+            ])->postJson("api/auth/absences");
+        $response->assertStatus(200)
+                ->assertJsonCount(1);
+
+        // Login again as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        // Admin can delete an user's absence
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->delete("api/auth/deleteAbsence/2");
+        $response->assertStatus(200)
+                ->assertJson([
+                    'message' => 'Ausencia borrada correctamente']);
+
+        // Verify absence1 has been deleted in database
+        $this->assertDatabaseMissing('absences', [
+            'id' => $absence2->id,
+        ]);
+
+        // Login as an user
         $response = $this->json('POST', 'api/auth/login', [
             'isAdmin' => false,
             'email' => 'user@example.com',
             'password' => 'password',
         ]);
 
-        // List of user's absences
-        $response = $this->withHeaders([
-            'Authorization' => $userToken,
-            'Accept' => '*/*'
-            ])->postJson("api/auth/absences");
-        $response->assertStatus(200)
-            ->assertJsonCount(1);
-
-        // Regular user can delete only regular user1's absences
-        $response = $this->withHeaders([
-            'Authorization' => $userToken,
-            'Accept' => '*/*'
-        ])->delete("api/auth/deleteAbsence/{$absence->id}");
-        $response->assertStatus(200)
-                ->assertJson([
-                    'message' => 'Ausencia borrada correctamente']);
-
         // List of user's absences after delete
-        /* $response = $this->withHeaders([
-            'Authorization' => $user1Token,
-            'Accept' => ''
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*'
             ])->postJson("api/auth/absences");
         $response->assertStatus(200)
-                ->assertJsonCount(0); */
-
-        // Verify absence has been deleted in database
-        $this->assertDatabaseMissing('absences', [
-            'id' => $absence->id,
-        ]);
+            ->assertJsonCount(0);
     }
 
-    public function test_userCanCreateOwnAbsences()
+    public function test_employeeCanCreateOwnAbsences()
     {
         // Create two regulars user
         $user = User::create([
@@ -287,7 +467,7 @@ class ApiCRUDAbsencesTest extends TestCase
                 ]);
     }
 
-    public function test_adminCanCreateOwnAndUsersAbsences()
+    public function test_adminCanCreateAbsencesForAllEmployeesAndAdmin()
     {
         // Create an admin
         $admin = User::create([
@@ -369,7 +549,7 @@ class ApiCRUDAbsencesTest extends TestCase
                 ]);
     }
     
-    public function test_allAbsencesCanBeShowedForAdminAndAnUserOnlyCanShowOwnAbsences()
+    public function test_allAbsencesCanBeSeenByAdminAndAnUserOnlyCanShowOwnAbsences()
     {
         // Create an admin and regular users
         $admin = User::factory()->create([
@@ -595,7 +775,7 @@ class ApiCRUDAbsencesTest extends TestCase
         $this->assertEquals('admin description updated by admin', $absence2->fresh()->description);
     }
 
-    public function test_anUserOnlyCanUpdateOwnAbsences() 
+    public function test_anEmployeeOnlyCanUpdateOwnAbsences() 
     {
         // Create an user and an admin
         $user = User::factory()->create([
