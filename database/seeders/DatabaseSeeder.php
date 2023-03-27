@@ -22,12 +22,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         User::factory()->create(['name' => 'María José', 'surname' => 'Santos', 'email' => 'mjsantos@gmail.com', 'isAdmin' => true]);
-        User::factory()->create(['name' => 'Lola', 'surname' => 'Navarro', 'email' => 'lnavarro@gmail.com', 'isAdmin' => false]);
-        User::factory()->create(['name' => 'Ana', 'surname' => 'Rueda', 'email' => 'arueda@gmail.com', 'isAdmin' => false]);
-        User::factory()->create(['name' => 'Sierri', 'surname' => 'Pérez', 'email' => 'sperez@gmail.com', 'isAdmin' => false]);
-        User::factory()->create(['name' => 'Veronika', 'surname' => 'Komarova', 'email' => 'vkomarova@gmail.com', 'isAdmin' => false]);
-        User::factory()->create(['name' => 'Camila', 'surname' => 'Ruiz', 'email' => 'cruiz@gmail.com', 'isAdmin' => false]);
-        User::factory()->create(['name' => 'Paloma', 'surname' => 'Ruiz', 'email' => 'pruiz@gmail.com', 'isAdmin' => false]);
+        User::factory()->create(['name' => 'Lola', 'surname' => 'Navarro', 'email' => 'lnavarro@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689850/lola.jpg']);
+        User::factory()->create(['name' => 'Ana', 'surname' => 'Rueda', 'email' => 'arueda@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689850/ana.jpg']);
+        User::factory()->create(['name' => 'Sierri', 'surname' => 'Pérez', 'email' => 'sperez@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689850/sierri.jpg']);
+        User::factory()->create(['name' => 'Veronika', 'surname' => 'Komarova', 'email' => 'vkomarova@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689849/veronika.jpg']);
+        User::factory()->create(['name' => 'Camila', 'surname' => 'Ruiz', 'email' => 'cruiz@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689851/camila.jpg']);
+        User::factory()->create(['name' => 'Paloma', 'surname' => 'Ruiz', 'email' => 'pruiz@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689850/paloma.jpg']);
         /* User::factory(50)->create(); */
         
         Absence::factory()->create([
