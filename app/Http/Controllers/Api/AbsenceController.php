@@ -69,9 +69,27 @@ class AbsenceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function showAbsence(string $id)
     {
         //
+        /* $user_id = auth()->user()->id;
+        $absence = Absence::where('user_id', $user_id)->find($id); */
+        $user = auth()->user();
+
+        $absence = Absence::find($id);
+        
+        /* if (!$absence) {
+            return response()->json(['message' => 'La ausencia no existe o no tienes permiso para verla'], 404);
+        } */
+
+        if ($user->id !== $absence->user_id) {
+            // Verificar si es admin 
+            if(!$user->isAdmin) {
+                return response()->json(['message' =>'No tienes permiso para ver esta ausencia'], 403);
+            }
+        }
+        
+        return response()->json($absence);
     }
 
     /**

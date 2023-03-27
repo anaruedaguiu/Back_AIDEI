@@ -204,5 +204,146 @@ class ApiCRUDAbsencesTest extends TestCase
             'id' => $absence->id,
         ]);
     }
+    
+    public function test_anAbsenceCanBeShowed()
+    {
+        // Create an admin and regular users
+        $admin = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
+
+        $user1 = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user1@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $user1Token = $user1->createToken('user1-token')->plainTextToken;
+
+        $user2 = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user2@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $user2Token = $user2->createToken('user2-token')->plainTextToken;
+
+        // Create absences
+        $absence1 = Absence::factory()->create([
+            'id' => 1,
+            'user_id' => $user1->id,
+            'startingDate' => '2023/03/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/03/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test1',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $absence2 = Absence::factory()->create([
+            'id' => 2,
+            'user_id' => $user1->id,
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test2',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $absence3 = Absence::factory()->create([
+            'id' => 3,
+            'user_id' => $user2->id,
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test2',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $absence4 = Absence::factory()->create([
+            'id' => 4,
+            'user_id' => $admin->id,
+            'startingDate' => '2023/04/01',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/04/02',
+            'endingTime' => '18:00:00',
+            'description' => 'description test2',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]); 
+
+        // Login as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+    
+        // Admin can access absences full list of all users
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/absences");
+        $response->assertStatus(200)
+                ->assertJsonCount(4);
+
+        // Admin can access all absences' show
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/showAbsence/1");
+
+        $response->assertStatus(200);
+
+        $this->assertNotEmpty($response);
+
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/showAbsence/4");
+
+        $response->assertStatus(200);
+
+        $this->assertNotEmpty($response);
+
+        // Login as an user1
+        $response = $this->json('POST', 'api/auth/login', [
+            'isAdmin' => false,
+            'email' => 'user1@example.com',
+            'password' => 'password',
+        ]);
+
+        // User1 only can access user1's absences 
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/absences");
+        $response->assertStatus(200)
+                ->assertJsonCount(2);
+        
+        // User1 only can access user1's absences show
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/showAbsence/1");
+
+        $response->assertStatus(200);
+
+        $this->assertNotEmpty($response);
+
+        // User1 can't access another user's absence show
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/showAbsence/3");
+
+        $response->assertStatus(403);
+    }
 }
 
