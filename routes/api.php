@@ -52,10 +52,3 @@ Route::group([
     Route::delete('deleteEmployee/{id}', [UserController::class, 'deleteEmployee'])->name('deleteEmployee');
     Route::put('updateEmployee/{id}', [UserController::class, 'updateEmployee'])->name('updateEmployee');
 });
-
-
-
-
-
-
-
