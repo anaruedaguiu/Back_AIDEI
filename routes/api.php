@@ -47,7 +47,6 @@ Route::group([
         'api'
     ],
 ], function () {
-
     // for all admins
     Route::post('registerEmployee', [UserController::class, 'registerEmployee']);
     Route::delete('deleteEmployee/{id}', [UserController::class, 'deleteEmployee'])->name('deleteEmployee');
