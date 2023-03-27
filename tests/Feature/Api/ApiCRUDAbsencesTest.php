@@ -368,6 +368,5 @@ class ApiCRUDAbsencesTest extends TestCase
                     ]
                 ]);
     }
-    
 }
 
