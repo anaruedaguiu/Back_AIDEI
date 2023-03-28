@@ -246,4 +246,129 @@ class ApiCRUDHolidaysTest extends TestCase
                     ]
                 ]);
     }
+
+    public function test_allholidaysCanBeSeenByAdminAndAnUserOnlyCanShowOwnholidays()
+    {
+        // Create an admin and regular users
+        $admin = User::factory()->create([
+            'isAdmin' => true,
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
+
+        $user1 = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user1@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $user1Token = $user1->createToken('user1-token')->plainTextToken;
+
+        $user2 = User::factory()->create([
+            'isAdmin' => false,
+            'email' => 'user2@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        $user2Token = $user2->createToken('user2-token')->plainTextToken;
+
+        // Create holidays
+        $holiday1 = Holiday::factory()->create([
+            'id' => 1,
+            'user_id' => $user1->id,
+            'startingDate' => '2023/03/01',
+            'endingDate' => '2023/03/02',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $holiday2 = Holiday::factory()->create([
+            'id' => 2,
+            'user_id' => $user1->id,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/02',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $holiday3 = Holiday::factory()->create([
+            'id' => 3,
+            'user_id' => $user2->id,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/02',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        $holiday4 = Holiday::factory()->create([
+            'id' => 4,
+            'user_id' => $admin->id,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/02',
+            'status' => 'Resuelta: aceptada',
+        ]); 
+
+        // Login as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+    
+        // Admin can access holidays full list of all users
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/holidays");
+        $response->assertStatus(200)
+                ->assertJsonCount(4);
+
+        // Admin can access all holidays' show
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/showHoliday/1");
+
+        $response->assertStatus(200);
+
+        $this->assertNotEmpty($response);
+
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/showHoliday/4");
+
+        $response->assertStatus(200);
+
+        $this->assertNotEmpty($response);
+
+        // Login as an user1
+        $response = $this->json('POST', 'api/auth/login', [
+            'email' => 'user1@example.com',
+            'password' => 'password',
+        ]);
+
+        // User1 only can access user1's holidays 
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/holidays");
+        $response->assertStatus(200)
+                ->assertJsonCount(2);
+        
+        // User1 only can access user1's holidays show
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/showHoliday/1");
+
+        $response->assertStatus(200);
+
+        $this->assertNotEmpty($response);
+
+        // User1 can't access another user's Holiday show
+        $response = $this->withHeaders([
+            'Authorization' => $user1Token,
+            'Accept' => '*/*'
+        ])->postJson("api/auth/showHoliday/3");
+
+        $response->assertStatus(403)
+                ->assertJson([
+                    'message' => 'No tienes permiso para ver este periodo de vacaciones']);
+    }
 }

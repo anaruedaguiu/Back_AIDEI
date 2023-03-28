@@ -47,9 +47,20 @@ class HolidayController extends Controller
         return response()->json(['message' => 'Vacaciones solicitadas exitosamente', 'holiday' => $holiday], 201);
     }
 
-    public function show(string $id)
+    public function showHoliday(string $id)
     {
+        $user = auth()->user();
+
+        $holiday = Holiday::find($id);
+
+        if ($user->id !== $holiday->user_id) {
+            // Verificar si es admin 
+            if(!$user->isAdmin) {
+                return response()->json(['message' =>'No tienes permiso para ver este periodo de vacaciones'], 403);
+            }
+        }
         
+        return response()->json($holiday);
     }
 
     public function update(Request $request, string $id)
