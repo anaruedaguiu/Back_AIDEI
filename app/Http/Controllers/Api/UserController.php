@@ -40,16 +40,12 @@ class UserController extends Controller
             'name'=> 'required',
             'surname'=> 'required',
             'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
             'phone' => 'required',
             'idNumber' => 'required',
             'sector' => 'required',
-            'image' => 'nullable',
             'startingDate' => 'required',
-            'endingDate' => 'nullable',
-            'active' => 'required',
-            'contractType' => 'required',
-            'isAdmin' => 'required'
+            'endingDate' => 'required',
         ]); 
 
         if($validator->fails()){

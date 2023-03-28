@@ -73,7 +73,12 @@ class ApiCRUDUsersTest extends TestCase
                         'surname' => 'surname',
                         'email' => 'admin@email.com',
                         'password' => 'password',
-                        'password_confirmation' => 'password'
+                        'password_confirmation' => 'password',
+                        'phone' => 'required',
+                        'idNumber' => 'required',
+                        'sector' => 'required',
+                        'startingDate' => 'required',
+                        'endingDate' => 'required',
                     ]);
         
         $response->assertStatus(201); 
@@ -87,7 +92,12 @@ class ApiCRUDUsersTest extends TestCase
                         'surname' => 'surname',
                         'email' => 'user1@email.com',
                         'password' => 'password',
-                        'password_confirmation' => 'password'
+                        'password_confirmation' => 'password',
+                        'phone' => 'required',
+                        'idNumber' => 'required',
+                        'sector' => 'required',
+                        'startingDate' => 'required',
+                        'endingDate' => 'required',
                     ]);
 
         $response->assertRedirect();
