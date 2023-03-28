@@ -63,8 +63,6 @@ class DatabaseSeeder extends Seeder
             'status' => 'Resuelta: aceptada',
         ]);
 
-        /* Absence::factory()->create(); */
-
         Holiday::factory()->create([
             'user_id' => 2,
             'startingDate' => '2023/04/01',
