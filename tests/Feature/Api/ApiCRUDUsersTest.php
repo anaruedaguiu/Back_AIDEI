@@ -145,7 +145,6 @@ class ApiCRUDUsersTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals('Test User', $user1->fresh()->name);
 
-
         // Create and Login as a regular user
         $user = User::factory()->create([
             'isAdmin' => false,

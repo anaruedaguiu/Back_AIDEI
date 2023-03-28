@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
 use App\Models\Absence;
+use App\Models\Holiday;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -32,9 +33,20 @@ class DatabaseSeeder extends Seeder
         
         Absence::factory()->create([
             'user_id' => 2,
-            'startingDate' => '2023/03/21',
+            'startingDate' => '2023/05/15',
             'startingTime' => '18:00:00',
-            'endingDate' => '2023/03/27',
+            'endingDate' => '2023/09/14',
+            'endingTime' => '18:00:00',
+            'description' => 'Baja maternidad',
+            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Absence::factory()->create([
+            'user_id' => 2,
+            'startingDate' => '2023/09/15',
+            'startingTime' => '18:00:00',
+            'endingDate' => '2023/10/14',
             'endingTime' => '18:00:00',
             'description' => 'Permiso de lactancia',
             'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
@@ -42,33 +54,69 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Absence::factory()->create([
-            'user_id' => 2,
-            'startingDate' => '2023/04/04',
-            'startingTime' => '18:00:00',
-            'endingDate' => '2023/04/08',
-            'endingTime' => '20:00:00',
-            'description' => 'Cuatro días para llevar al conejo al vet',
-            'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
-            'status' => 'Resuelta: aceptada',
-        ]);
-
-        Absence::factory()->create([
             'user_id' => 3,
-            'startingDate' => '2023/03/21',
+            'startingDate' => '2023/03/29',
             'startingTime' => '18:00:00',
-            'endingDate' => '2023/03/27',
+            'endingDate' => '2023/03/31',
             'endingTime' => '18:00:00',
-            'description' => 'Paloma precipitada',
+            'description' => 'Mudanza',
             'addDocument' => 'https://pbs.twimg.com/media/EfIXHskX0AAZsQd.jpg',
             'status' => 'Resuelta: aceptada',
         ]);
 
         /* Absence::factory()->create(); */
 
+        Holiday::factory()->create([
+            'user_id' => 2,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 3,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 4,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 5,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 6,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
+        Holiday::factory()->create([
+            'user_id' => 7,
+            'startingDate' => '2023/04/01',
+            'endingDate' => '2023/04/09',
+            'status' => 'Resuelta: aceptada',
+        ]);
+
         $users = User::all();
 
         foreach ($users as $user) {
             Absence::factory()
+            ->count(1)
+            ->create([
+                'user_id' => $user->id
+            ]);
+            Holiday::factory()
             ->count(1)
             ->create([
                 'user_id' => $user->id
