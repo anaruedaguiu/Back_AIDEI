@@ -34,7 +34,7 @@ Route::group([
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('profile/{id}', [AuthController::class, 'profile'])->name('profile');
     Route::post('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
-    Route::get('absences', [AbsenceController::class, 'absences'])->name('absences');
+    Route::post('absences', [AbsenceController::class, 'absences'])->name('absences');
     Route::delete('deleteAbsence/{id}', [AbsenceController::class, 'deleteAbsence'])->name('deleteAbsence');
     Route::post('createAbsence', [AbsenceController::class, 'createAbsence'])->name('createAbsence');
     Route::put('updateAbsence/{id}', [AbsenceController::class, 'updateAbsence'])->name('updateAbsence');
@@ -52,5 +52,4 @@ Route::group([
     Route::post('registerEmployee', [UserController::class, 'registerEmployee']);
     Route::delete('deleteEmployee/{id}', [UserController::class, 'deleteEmployee'])->name('deleteEmployee');
     Route::put('updateEmployee/{id}', [UserController::class, 'updateEmployee'])->name('updateEmployee');
-    Route::get('employees', [UserController::class, 'dashboard']);
 });
