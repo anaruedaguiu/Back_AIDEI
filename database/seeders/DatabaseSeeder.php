@@ -29,7 +29,6 @@ class DatabaseSeeder extends Seeder
         User::factory()->create(['name' => 'Veronika', 'surname' => 'Komarova', 'email' => 'vkomarova@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689849/veronika.jpg', 'phone'=> '555555555', 'idNumber' => '55555555E', 'sector' => 'Hilo Doble', 'startingDate' => '2023-02-27', 'endingDate' => '2023-03-30', 'contractType' => false]);
         User::factory()->create(['name' => 'Camila', 'surname' => 'Ruiz', 'email' => 'cruiz@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689851/camila.jpg', 'phone'=> '666666666', 'idNumber' => '66666666F', 'sector' => 'Jardinería', 'startingDate' => '2023-02-27', 'endingDate' => '2023-03-30', 'contractType' => false]);
         User::factory()->create(['name' => 'Paloma', 'surname' => 'Ruiz', 'email' => 'pruiz@gmail.com', 'isAdmin' => false, 'image' => 'https://res.cloudinary.com/dkbwmuo7n/image/upload/v1679689850/paloma.jpg', 'phone'=> '777777777', 'idNumber' => '77777777G', 'sector' => 'Limpieza Málaga', 'startingDate' => '2023-02-27', 'endingDate' => '2023-03-30', 'contractType' => false]);
-        /* User::factory(50)->create(); */
         
         Absence::factory()->create([
             'user_id' => 2,
