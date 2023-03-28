@@ -108,4 +108,142 @@ class ApiCRUDHolidaysTest extends TestCase
                 ->assertJsonCount(2);
         
     }
+
+    public function test_employeeCanCreateOwnHolidays()
+    {
+        // Create two regulars user
+        $user = User::create([
+            'isAdmin' => false,
+            'name' => 'userName',
+            'surname' => 'userSurname',
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $otherUser = User::create([
+            'isAdmin' => false,
+            'name' => 'otherUserName',
+            'surname' => 'otherUserSurname',
+            'email' => 'otheruser@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Authenticate the user and get the token
+        $userToken = $user->createToken('user-token')->plainTextToken;
+
+        // Login as an user
+        $response = $this->json('POST', 'api/auth/login', [
+            'email' => 'user@example.com',
+            'password' => 'password',
+        ]);
+
+        // Create an holiday as regular user
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*' 
+        ])->postJson('api/auth/createHoliday', [
+            'startingDate' => '2023/03/01',
+            'endingDate' => '2023/03/15',
+        ]);
+
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Vacaciones solicitadas exitosamente',
+                    'holiday' => [
+                        'user_id' => $user->id,
+                        'startingDate' => '2023/03/01',
+                        'endingDate' => '2023/03/15',
+                    ]
+                ]);
+
+        // Create an other user's abscence as regular user
+        $response = $this->withHeaders([
+            'Authorization' => $userToken,
+            'Accept' => '*/*' 
+        ])->postJson('api/auth/createHoliday', [
+            'user_id' => $otherUser->id,
+            'startingDate' => '2023/03/01',
+            'endingDate' => '2023/03/15',
+        ]);
+
+        //Even if you pass the id of another user it creates the holiday of the logged in user.
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Vacaciones solicitadas exitosamente',
+                    'holiday' => [
+                        'user_id' => $user->id,
+                        'startingDate' => '2023/03/01',
+                        'endingDate' => '2023/03/15',
+                    ]
+                ]);
+    }
+
+    public function test_adminCanCreateHolidaysForAllEmployeesAndAdmin()
+    {
+        // Create an admin
+        $admin = User::create([
+            'isAdmin' => true,
+            'name' => 'adminName',
+            'surname' => 'adminSurname',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+        ]);
+        // Create a regular user
+        $user = User::create([
+            'isAdmin' => false,
+            'name' => 'userName',
+            'surname' => 'userSurname',
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // Authenticate the admin and get the token
+        $adminToken = $admin->createToken('admin-token')->plainTextToken;
+
+        // Login as an admin
+        $response = $this->json('POST', 'api/auth/login', [
+            'email' => 'admin@example.com',
+            'password' => 'password',
+        ]);
+
+        // Create an own holiday as admin
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*' 
+        ])->postJson('api/auth/createHoliday', [
+            'user_id' => $admin->id,
+            'startingDate' => '2023/03/01',
+            'endingDate' => '2023/03/15',
+        ]);
+
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Vacaciones solicitadas exitosamente',
+                    'holiday' => [
+                        'user_id' => $admin->id,
+                        'startingDate' => '2023/03/01',
+                        'endingDate' => '2023/03/15',
+                    ]
+                ]);
+
+        // Create an user's holiday as admin
+        $response = $this->withHeaders([
+            'Authorization' => $adminToken,
+            'Accept' => '*/*' 
+        ])->postJson('api/auth/createHoliday', [
+            'user_id' => $user->id,
+            'startingDate' => '2023/03/01',
+            'endingDate' => '2023/03/15',
+        ]);
+
+        $response->assertStatus(201)
+                ->assertJson([
+                    'message' => 'Vacaciones solicitadas exitosamente',
+                    'holiday' => [
+                        'user_id' => $user->id,
+                        'startingDate' => '2023/03/01',
+                        'endingDate' => '2023/03/15',
+                    ]
+                ]);
+    }
 }

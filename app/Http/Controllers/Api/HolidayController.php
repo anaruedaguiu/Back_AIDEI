@@ -24,9 +24,27 @@ class HolidayController extends Controller
         return response()->json($holidays);
     }
 
-    public function store(Request $request)
+    public function createHoliday()
     {
+        $user = auth()->user();
+
+        if ($user->isAdmin && request('user_id')) {
+            $user_id = request('user_id');
+        } 
         
+        if (!$user->isAdmin) {
+            $user_id = $user->id;
+        }
+
+        $holiday = Holiday::create([
+            'user_id' => $user_id,
+            'startingDate' => request('startingDate'),
+            'endingDate'=> request('endingDate'),
+        ]);
+
+        $holiday->save();
+        
+        return response()->json(['message' => 'Vacaciones solicitadas exitosamente', 'holiday' => $holiday], 201);
     }
 
     public function show(string $id)

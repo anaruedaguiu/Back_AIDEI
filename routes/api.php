@@ -40,6 +40,7 @@ Route::group([
     Route::put('updateAbsence/{id}', [AbsenceController::class, 'updateAbsence'])->name('updateAbsence');
     Route::post('showAbsence/{id}', [AbsenceController::class, 'showAbsence'])->name('showAbsence');
     Route::post('holidays', [HolidayController::class, 'holidays'])->name('holidays');
+    Route::post('createHoliday', [HolidayController::class, 'createHoliday'])->name('createHoliday');
 });
 
 Route::group([
