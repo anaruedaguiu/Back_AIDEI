@@ -185,8 +185,8 @@ To run the tests, execute the following command(s)
 
 ## Methodology 📚
   
-- TDD
-- Agile with Scrum
+- Testing
+- Agile with Scrum & Kanban
 - Mob, pair and solo programming
   
 ***
