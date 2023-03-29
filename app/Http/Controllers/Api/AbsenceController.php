@@ -32,7 +32,6 @@ class AbsenceController extends Controller
      */
     public function createAbsence()
     {
-        //
         $user = auth()->user();
 
         if ($user->isAdmin && request('user_id')) {
@@ -59,25 +58,15 @@ class AbsenceController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function showAbsence(string $id)
     {
-        //
         $user = auth()->user();
 
         $absence = Absence::find($id);
 
         if ($user->id !== $absence->user_id) {
-            // Verificar si es admin 
             if(!$user->isAdmin) {
                 return response()->json(['message' =>'No tienes permiso para ver esta ausencia'], 403);
             }
@@ -87,32 +76,19 @@ class AbsenceController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function updateAbsence(Request $request, string $id)
     {
-        //
         $user = auth()->user();
 
         $absence = Absence::find($id);
 
-        // Verificar que la ausencia pertenece a esa persona
         if ($user->id !== $absence->user_id) {
-            // Verificar si es admin 
             if(!$user->isAdmin) {
                 return response()->json(['message' =>'No tienes permiso para modificar esta ausencia'], 403);
             }
         }
-
-        // Modificar la ausencia
 
         $absence->update([
             'startingDate' => request('startingDate'),
@@ -123,7 +99,6 @@ class AbsenceController extends Controller
             'description'=> request('description'),
         ]);
 
-        // Guardar la modificación
         $absence->save();
 
         return response()->json(['message' => 'Ausencia modificada correctamente'], 200);
@@ -134,20 +109,16 @@ class AbsenceController extends Controller
      */
     public function deleteAbsence(string $id)
     {
-        //
         $user = auth()->user();
 
         $absence = Absence::find($id);
 
-        // Verificar que la ausencia pertenece a esa persona
         if ($user->id !== $absence->user_id) {
-            // Verificar si es admin 
             if(!$user->isAdmin) {
                 return response()->json(['message' =>'No tienes permiso para borrar esta ausencia'], 403);
             }
         }
 
-        // Borrar la ausencia
         $absence->delete();
 
         return response()->json(['message' => 'Ausencia borrada correctamente'], 200);

@@ -14,7 +14,6 @@ class ApiCRUDHolidaysTest extends TestCase
     
     public function test_onlyAdminsCanAccessHolidaysFullList()
     {
-        // Create an admin and regular users
         $admin = User::factory()->create([
             'isAdmin' => true,
             'email' => 'admin@example.com',
@@ -36,7 +35,6 @@ class ApiCRUDHolidaysTest extends TestCase
         ]);
         $user2Token = $user2->createToken('user2-token')->plainTextToken;
 
-        // Create holidays
         $holiday1 = Holiday::factory()->create([
             'user_id' => $admin->id,
             'startingDate' => '2023/03/01',
@@ -65,13 +63,11 @@ class ApiCRUDHolidaysTest extends TestCase
             'status' => 'Resuelta: aceptada',
         ]);
 
-        // Login as an admin
         $response = $this->json('POST', 'api/auth/login', [
             'email' => 'admin@example.com',
             'password' => 'password',
         ]);
     
-        // Admin can access holidays full list of all users
         $response = $this->withHeaders([
             'Authorization' => $adminToken,
             'Accept' => '*/*'
@@ -79,13 +75,11 @@ class ApiCRUDHolidaysTest extends TestCase
         $response->assertStatus(200)
                 ->assertJsonCount(4);
 
-        // Login as a regular user
         $response = $this->json('POST', 'api/auth/login', [
             'email' => 'user1@example.com',
             'password' => 'password',
         ]);
 
-        // Regular user can access only regular user1's holidays
         $response = $this->withHeaders([
             'Authorization' => $user1Token,
             'Accept' => '*/*'
@@ -93,13 +87,11 @@ class ApiCRUDHolidaysTest extends TestCase
         $response->assertStatus(200)
                 ->assertJsonCount(1);
 
-        // Login as a regular user
         $response = $this->json('POST', 'api/auth/login', [
             'email' => 'user2@example.com',
             'password' => 'password',
         ]);
 
-        // Regular user2 can access only regular user2's holidays
         $response = $this->withHeaders([
             'Authorization' => $user2Token,
             'Accept' => '*/*'

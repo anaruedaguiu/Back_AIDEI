@@ -33,7 +33,6 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Usuario no autorizado'], 401);
         }
-        // User es necesario para saber si es admin o no y usar el resto de datos del user
         $user = Auth::user();
 
         return $this->respondWithToken($token, $user);
@@ -49,16 +48,13 @@ class AuthController extends Controller
         $user = User::find($id);
 
         if (auth()->user()->isAdmin) {
-            // Si el usuario actual es un administrador, puede ver cualquier perfil
             return response()->json($user);
         }
 
         if (auth()->id() !== $user->id) {
-            // Si el usuario actual no es el dueño del perfil, devuelve un error 403
             return response()->json(['message' =>'No tienes permiso para ver este perfil'], 403);
         }
 
-        // Si el usuario actual es el dueño del perfil, puede ver su propio perfil
         return response()->json($user);
     }
 

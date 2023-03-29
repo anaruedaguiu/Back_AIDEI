@@ -96,7 +96,6 @@ class UserController extends Controller
 
     public function updateEmployee(Request $request, $id)
     {
-        //
         $user = User::find($id);
 
         $user->update([

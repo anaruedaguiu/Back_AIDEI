@@ -64,7 +64,6 @@ class ApiCRUDAuthTest extends TestCase
 
     public function test_adminAndEmployeesProfileCanBeShowed()
     {
-        // Create an admin and regular user
         $admin = User::factory()->create([
             'isAdmin' => true,
             'email' => 'admin@example.com',
@@ -79,14 +78,12 @@ class ApiCRUDAuthTest extends TestCase
         ]);
         $userToken = $user->createToken('user-token')->plainTextToken;
 
-        // Login as an admin
         $response = $this->json('POST', 'api/auth/login', [
             'isAdmin' => true,
             'email' => 'admin@example.com',
             'password' => 'password',
         ]);
 
-        // Admin can access users full list 
         $response = $this->withHeaders([
             'Authorization' => $adminToken,
             'Accept' => '*/*'
@@ -94,14 +91,12 @@ class ApiCRUDAuthTest extends TestCase
         $response->assertStatus(200)
                 ->assertJsonCount(2);
 
-        // Login as an admin
         $response = $this->json('POST', 'api/auth/login', [
             'isAdmin' => true,
             'email' => 'admin@example.com',
             'password' => 'password',
         ]);
 
-        // Admin can see user's profile
         $response = $this->withHeaders([
             'Authorization' => $adminToken,
             'Accept' => '*/*'
@@ -110,7 +105,6 @@ class ApiCRUDAuthTest extends TestCase
         
         $this->assertNotEmpty($response);
 
-        // Admin can see user's profile
         $response = $this->withHeaders([
             'Authorization' => $adminToken,
             'Accept' => '*/*'
@@ -119,14 +113,12 @@ class ApiCRUDAuthTest extends TestCase
         
         $this->assertNotEmpty($response);
 
-        // Login as an user
         $response = $this->json('POST', 'api/auth/login', [
             'isAdmin' => false,
             'email' => 'user@example.com',
             'password' => 'password',
         ]);
 
-        // User can see only own profile
         $response = $this->withHeaders([
             'Authorization' => $userToken,
             'Accept' => '*/*'
@@ -135,7 +127,6 @@ class ApiCRUDAuthTest extends TestCase
         
         $this->assertNotEmpty($response);
 
-        // User can't see other's profile
         $response = $this->withHeaders([
             'Authorization' => $userToken,
             'Accept' => '*/*'
