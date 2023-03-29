@@ -46,6 +46,9 @@ class UserController extends Controller
             'sector' => 'required',
             'startingDate' => 'required',
             'endingDate' => 'required',
+            'status' => 'required',
+            'contractType' => 'required',
+            'isAdmin' => 'required'
         ]); 
 
         if($validator->fails()){
@@ -54,7 +57,18 @@ class UserController extends Controller
 
         $user = User::create(array_merge(
             $validator->validated(),
-            ['password' => bcrypt($request->password)]
+            ['password' => bcrypt($request->password)],
+            ['name' => $request->name],
+            ['surname' => $request->surname],
+            ['email' => $request->email],
+            ['phone' =>$request->phone],
+            ['idNumber'=> $request->idNumber],
+            ['sector' => $request->sector],
+            ['startingDate' => $request->startingDate],
+            ['endingDate' => $request->endingDate],
+            ['status' => $request->status],
+            ['contractType' => $request->contractType],
+            ['isAdmin' => $request->isAdmin],
         ));
 
 

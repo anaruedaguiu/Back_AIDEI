@@ -30,7 +30,7 @@ class User extends Authenticatable implements JWTSubject
         'image',
         'startingDate',
         'endingDate',
-        'active',
+        'status',
         'contractType',
         'isAdmin',
     ];

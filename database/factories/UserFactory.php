@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'image' => fake()->imageUrl(),
             'startingDate' => fake()->date($format = 'Y-m-d', $max = 'now'),
             'endingDate' => fake()->date($format = 'Y-m-d', $max = 'now'),
-            'active' => true,
+            'status' => true,
             'contractType' => true,
             'isAdmin' => false,
             'remember_token' => Str::random(10),
