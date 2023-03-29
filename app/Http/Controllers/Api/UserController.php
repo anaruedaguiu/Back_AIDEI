@@ -45,7 +45,6 @@ class UserController extends Controller
             'idNumber' => 'required',
             'sector' => 'required',
             'startingDate' => 'required',
-            'endingDate' => 'required',
             'status' => 'required',
             'contractType' => 'required',
             'isAdmin' => 'required'
@@ -65,7 +64,6 @@ class UserController extends Controller
             ['idNumber'=> $request->idNumber],
             ['sector' => $request->sector],
             ['startingDate' => $request->startingDate],
-            ['endingDate' => $request->endingDate],
             ['status' => $request->status],
             ['contractType' => $request->contractType],
             ['isAdmin' => $request->isAdmin],

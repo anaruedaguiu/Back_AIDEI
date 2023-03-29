@@ -78,7 +78,6 @@ class ApiCRUDUsersTest extends TestCase
                         'idNumber' => 'required',
                         'sector' => 'required',
                         'startingDate' => 'required',
-                        'endingDate' => 'required',
                         'status' => 'required',
                         'contractType' => 'required',
                         'isAdmin' => 'required'
@@ -100,7 +99,6 @@ class ApiCRUDUsersTest extends TestCase
                         'idNumber' => 'required',
                         'sector' => 'required',
                         'startingDate' => 'required',
-                        'endingDate' => 'required',
                         'status' => 'required',
                         'contractType' => 'required',
                         'isAdmin' => 'required'
