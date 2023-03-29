@@ -51,8 +51,18 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            /* 'phone' => ['required'],
+            'idNumber' => ['required'],
+            'sector' => ['required'],
+            'image' => ['nullable'],
+            'startingDate' => ['required'],
+            'endingDate' => ['nullable'],
+            'active' => ['required'],
+            'contractType' => ['required'],
+            'isAdmin' => ['required'] */
         ]);
     }
 
@@ -66,8 +76,19 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'surname' => $data['surname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'password_confirmation' => Hash::make($data['password']),
+            'phone' => $data['phone'],
+            'idNumber' => $data['idNumber'],
+            'sector' => $data['sector'],
+            'image' => $data['image'],
+            'startingDate' => $data['startingDate'],
+            'endingDate' => $data['endingDate'],
+            'active' => $data['active'],
+            'contractType' => $data['contractType'],
+            'isAdmin' => $data['isAdmin'],
         ]);
     }
 }

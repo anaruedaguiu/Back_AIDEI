@@ -26,7 +26,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'phone',
         'idNumber',
-        'collectiveAgreement',
+        'sector',
         'image',
         'startingDate',
         'endingDate',
@@ -67,5 +67,15 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function absences()
+    {
+        return $this->hasMany('App\Models\Absence', 'user_id', 'id');
+    }
+
+    public function holidays()
+    {
+        return $this->hasMany('App\Models\Holiday', 'user_id', 'id');
     }
 }

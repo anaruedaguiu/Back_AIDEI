@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-
 
 
 class AuthController extends Controller
@@ -20,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login']]);
     }
 
     /**
@@ -32,11 +30,13 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (!$token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Usuario no autorizado'], 401);
         }
+        // User es necesario para saber si es admin o no y usar el resto de datos del user
+        $user = Auth::user();
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $user);
     }
 
     /**
@@ -44,9 +44,22 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function profile(string $id)
     {
-        return response()->json(auth()->user());
+        $user = User::find($id);
+
+        if (auth()->user()->isAdmin) {
+            // Si el usuario actual es un administrador, puede ver cualquier perfil
+            return response()->json($user);
+        }
+
+        if (auth()->id() !== $user->id) {
+            // Si el usuario actual no es el dueño del perfil, devuelve un error 403
+            return response()->json(['message' =>'No tienes permiso para ver este perfil'], 403);
+        }
+
+        // Si el usuario actual es el dueño del perfil, puede ver su propio perfil
+        return response()->json($user);
     }
 
     /**
@@ -58,7 +71,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Sesión cerrada exitosamente']);
     }
 
     /**
@@ -75,39 +88,17 @@ class AuthController extends Controller
      * Get the token array structure.
      *
      * @param  string $token
+     * @param  User $user Los datos de usuario (por defecto null)
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user = null)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
-    }
-
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name'=> 'required',
-            'surname'=> 'required',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:6'
-        ]); 
-
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(),400);
-        }
-
-        $user = User::create(array_merge(
-            $validator->validated(),
-            ['password' => bcrypt($request->password)]
-        ));
-
-        return response()->json([
-            'message' => '¡Usuario registrado exitosamente!',
+            'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => $user
-        ],201);
+        ]);
     }
 }

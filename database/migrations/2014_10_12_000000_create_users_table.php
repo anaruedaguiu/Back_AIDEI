@@ -20,12 +20,12 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone')->nullable();
             $table->string('idNumber')->nullable();
-            $table->string('collectiveAgreement')->nullable();
+            $table->string('sector')->nullable();
             $table->string('image')->nullable();
             $table->date('startingDate')->nullable();
             $table->date('endingDate')->nullable();
             $table->boolean('status')->default(true);
-            $table->boolean('contractType')->nullable();
+            $table->boolean('contractType')->default(false);
             $table->boolean('isAdmin')->default(false);
             $table->rememberToken();
             $table->timestamps();

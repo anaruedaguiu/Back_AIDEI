@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AbsenceController;
+use App\Http\Controllers\Api\HolidayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +29,27 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('me', [AuthController::class, 'me']);
-
+    Route::post('profile/{id}', [AuthController::class, 'profile'])->name('profile');
+    Route::post('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::post('absences', [AbsenceController::class, 'absences'])->name('absences');
+    Route::delete('deleteAbsence/{id}', [AbsenceController::class, 'deleteAbsence'])->name('deleteAbsence');
+    Route::post('createAbsence', [AbsenceController::class, 'createAbsence'])->name('createAbsence');
+    Route::put('updateAbsence/{id}', [AbsenceController::class, 'updateAbsence'])->name('updateAbsence');
+    Route::post('showAbsence/{id}', [AbsenceController::class, 'showAbsence'])->name('showAbsence');
+    Route::post('holidays', [HolidayController::class, 'holidays'])->name('holidays');
 });
 
-/* Route::get('/', [UserController::class, 'index'])->name('eventsAPI'); */
+Route::group([
+    'middleware' => [
+        'isadmin',
+        'api'
+    ],
+], function () {
+    // for all admins
+    Route::post('registerEmployee', [UserController::class, 'registerEmployee']);
+    Route::delete('deleteEmployee/{id}', [UserController::class, 'deleteEmployee'])->name('deleteEmployee');
+    Route::put('updateEmployee/{id}', [UserController::class, 'updateEmployee'])->name('updateEmployee');
+});

@@ -52,4 +52,8 @@ $app->singleton(
 |
 */
 
+// Agregado para poder hcer llaadas al backend desde el front en localhost
+header('Access-Control-Allow-Methods: *');
+header('Access-Control-Allow-Headers: *');
+
 return $app;
