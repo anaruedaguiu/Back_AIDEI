@@ -79,6 +79,9 @@ class ApiCRUDUsersTest extends TestCase
                         'sector' => 'required',
                         'startingDate' => 'required',
                         'endingDate' => 'required',
+                        'status' => 'required',
+                        'contractType' => 'required',
+                        'isAdmin' => 'required'
                     ]);
         
         $response->assertStatus(201); 
@@ -98,6 +101,9 @@ class ApiCRUDUsersTest extends TestCase
                         'sector' => 'required',
                         'startingDate' => 'required',
                         'endingDate' => 'required',
+                        'status' => 'required',
+                        'contractType' => 'required',
+                        'isAdmin' => 'required'
                     ]);
 
         $response->assertRedirect();
