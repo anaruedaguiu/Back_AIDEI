@@ -2,64 +2,115 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware(['auth:api']);
+    }
+    
+    public function dashboard(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user->isAdmin) {
+            $users = User::all();
+            return response()->json($users);
+        }
+
+        if ($user) {
+            return response()->json($user);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function registerEmployee(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'=> 'required',
+            'surname'=> 'required',
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|min:6',
+            'phone' => 'required',
+            'idNumber' => 'required',
+            'sector' => 'required',
+            'startingDate' => 'required',
+            'endingDate' => 'required',
+            'status' => 'required',
+            'contractType' => 'required',
+            'isAdmin' => 'required'
+        ]); 
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(),400);
+        }
+
+        $user = User::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)],
+            ['name' => $request->name],
+            ['surname' => $request->surname],
+            ['email' => $request->email],
+            ['phone' =>$request->phone],
+            ['idNumber'=> $request->idNumber],
+            ['sector' => $request->sector],
+            ['startingDate' => $request->startingDate],
+            ['endingDate' => $request->endingDate],
+            ['status' => $request->status],
+            ['contractType' => $request->contractType],
+            ['isAdmin' => $request->isAdmin],
+        ));
+
+
+        return response()->json([
+            'message' => '¡Registro realizado exitosamente!',
+            'user' => $user
+        ],201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function deleteEmployee ($id)
     {
-        //
-    }
+        $user = User::find($id);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if (!$user) {
+            return response()->json(['error' => 'Registro no encontrado'], 404);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if(!auth()->user()->isAdmin) {
+            return response()->json(['error' => 'No autorizado'], 403);
+        }
+        
+        $user->delete();
+        
+        return response()->json(['message' => 'Registro eliminado exitosamente'], 200);
+        return response()->json($user, 200);
+    } 
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function updateEmployee(Request $request, $id)
     {
         //
-    }
+        $user = User::find($id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $user->update([
+            'name' => $request->name,
+            'surname'=> $request->surname,
+            'email'=> $request->email,
+            'password'=> $request->password,
+        ]);
+
+        $user->save();
+        
+        return response()->json($user, 200);
     }
 }
+
