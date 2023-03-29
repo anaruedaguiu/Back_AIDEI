@@ -43,7 +43,7 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
             'phone' => 'required',
             'idNumber' => 'required',
-            'sector' => 'required', 
+            'sector' => 'required',
             'startingDate' => 'required',
             'endingDate' => 'required',
             'status' => 'required',
