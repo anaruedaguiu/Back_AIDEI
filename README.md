@@ -177,7 +177,7 @@ To run the tests, execute the following command(s)
 
   npm run test
 ```
-<img width="444" alt="test_npm_aidei_presentación" src="https://user-images.githubusercontent.com/98114939/228554458-35c1ee09-8abd-477d-812e-aacd07c93875.png">
+<img width="444" alt="test_npm_aidei_presentación" src="https://user-images.githubusercontent.com/108950985/228664010-8a4077ab-ca9e-4922-9e79-af80c9798282.png">
 
 
 
