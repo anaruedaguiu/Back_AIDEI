@@ -29,8 +29,8 @@ Leave Management Application  <img src="https://user-images.githubusercontent.co
 | Name | Role | <img src="https://github.com/Yelose/Yelose/blob/main/img/github.png" width="30px" height="30px"> |
 | :--- | :---: | :---: |
 | Lola Navarro | Scrum Master | https://github.com/ZLoln |
-| Camila Ruiz | Scrum Master | https://github.com/camilaruiz17 |
 | Ana Rueda | Product Owner | https://github.com/anaruedaguiu |
+| Camila Ruiz | Developer| https://github.com/camilaruiz17 |
 | Sierri Pérez | Developer | https://github.com/sierriconvoz |
 | Veronika Komarova | Developer | https://github.com/VeronikaKoma |
 | Paloma Ruiz | Developer| https://github.com/birdsinyourgarden |
@@ -157,25 +157,47 @@ Front-end
 ## Tests ✅
   
 To run the tests, execute the following command(s)
+
+**BACK**
+
 ```bash
   php artisan test
 ```
-<img width="500" alt="test_artisan_aidei_mvp2" src="https://user-images.githubusercontent.com/117440372/225344864-a18c2fab-06e1-440f-bade-ce775a69e808.png">
+<img width="628" alt="test_artisan_aidei_presentación" src="https://user-images.githubusercontent.com/98114939/228551487-e6ced1fd-2198-4c74-8063-2fa9ff23644b.png">
 
 ```bash
-  vendor/bin/phpunit tests
+
+  vendor/bin/phpunit
 ```
-<img width="500" alt="test_vendor_aidei_mvp2" src="https://user-images.githubusercontent.com/117440372/225345098-881dbe7f-65ff-4eeb-9a07-44e331260e24.png">
+<img width="595" alt="test_vendor_aidei_presentación" src="https://user-images.githubusercontent.com/98114939/228551607-af91fdc5-eee4-4e94-b320-432e5f64c9e1.png">
+
+**FRONT**
+
+```bash
+
+  npm run test
+```
+<img width="444" alt="test_npm_aidei_presentación" src="https://user-images.githubusercontent.com/98114939/228554458-35c1ee09-8abd-477d-812e-aacd07c93875.png">
+
+
 
 ***
 
 ## Methodology 📚
   
-- TDD
-- Agile with Scrum
+- Testing
+- Agile with Scrum & Kanban
 - Mob, pair and solo programming
   
 ***
 
-## Next Steps 🔜
+## Next Steps 👣
+
+- Finish connecting Back and Front.
+- Ensure that documents attached in absences are not only uploaded to Cloudinary, but also saved in the database.
+- Modify the employee's update so that they can edit certain fields of their personal information. For example: change the password they use to log in to the application or their profile picture.
+- Create a table for the status of absence requests and another for holidays, so that the scalability of the code is maintained and the status of the request can be incorporated into the application: 
+PENDING - IN PROCESS - PROCESSED
+- Adding more functionalities to the calendar.
+- Correct the user endingDate field so that it works exactly as we want it to.
 
